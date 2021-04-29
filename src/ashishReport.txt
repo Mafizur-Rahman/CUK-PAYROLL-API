@@ -1,0 +1,14 @@
+ANGULAR
+
+1.routing
+2.service
+3.http client 
+4.rective form
+5.admin project employee module savefunction, get function ,set pre data, get dropdown 
+
+spring 
+
+1.study api's employee management ,admin setup,common controller.
+2.generate dynamic excel sheet with spring boot 
+3.change trigger based generated ids to mysql
+ 
