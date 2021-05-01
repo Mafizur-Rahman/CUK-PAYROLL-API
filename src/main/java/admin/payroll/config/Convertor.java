@@ -21,6 +21,7 @@ import admin.payroll.entity.PmEmpDatesEntity;
 import admin.payroll.entity.PmEmpDocsEntity;
 import admin.payroll.entity.PmGecEntity;
 import admin.payroll.entity.PmKinFeeEntity;
+import admin.payroll.entity.PmLeaveTypeEntity;
 import admin.payroll.entity.PmLoanEntity;
 import admin.payroll.entity.PmPayMatrixEntity;
 import admin.payroll.entity.PmPraEntity;
@@ -53,6 +54,7 @@ import admin.payroll.models.SaveInstalRecovModel;
 import admin.payroll.models.SaveKINFeeMasterModel;
 import admin.payroll.models.SaveKINMasterModel;
 import admin.payroll.models.SavePayMatrixModel;
+import admin.payroll.models.SavePmLeaveTypeModel;
 import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SavePmRolesModel;
 import admin.payroll.models.SavePmUnitSetupModel;
@@ -151,39 +153,43 @@ public class Convertor {
 	public static PmBonusMstEntity convertToPMBpnusMst(@Valid BonusChangeDataModel payload) {
 		return MAPPER.convertValue(payload, PmBonusMstEntity.class);
 	}
-	
+
 	public static PmUsersEntity convertToPmUserEntity(@Valid SavePmUsersModel payload) {
 		return MAPPER.convertValue(payload, PmUsersEntity.class);
 	}
-	
+
 	public static PmRolesEntity convertToPmRolesEntity(@Valid SavePmRolesModel payload) {
-       return MAPPER.convertValue(payload, PmRolesEntity.class);
+		return MAPPER.convertValue(payload, PmRolesEntity.class);
 	}
 
 	public static PmUserRightsEntity convertToPmUserRightEntity(@Valid SavePmUserRightModel payload) {
 		return MAPPER.convertValue(payload, PmUserRightsEntity.class);
 	}
-	
-	
-	public static ITaxDataEntity convertToITaxDataEntity(@Valid ItaxDataModel payload ) {
+
+	public static ITaxDataEntity convertToITaxDataEntity(@Valid ItaxDataModel payload) {
 		return MAPPER.convertValue(payload, ITaxDataEntity.class);
 	}
-	
+
 	public static TaxCalcEntity convertToTaxCalcEntity(@Valid TaxCalcModel payload) {
 		return MAPPER.convertValue(payload, TaxCalcEntity.class);
 	}
-	
-	//create converter for itaxArrearEntity by kishan pandey 
-	
+
+	// create converter for itaxArrearEntity by kishan pandey
+
 	public static ItaxArrearEntity convertToItaxArrearEntity(@Valid ItaxArrearModel payload) {
 		return MAPPER.convertValue(payload, ItaxArrearEntity.class);
 	}
-	
+
 	public static GpfAdvEntity convertToGpfAdvEntity(@Valid GpfAdvSaveModel gpfAdvSaveModel) {
 		return MAPPER.convertValue(gpfAdvSaveModel, GpfAdvEntity.class);
 	}
-	
+
 	public static SeventhMatrixEntity convertToSeventhMtrix(@Valid SaveSeventhMatrixModel payload) {
 		return MAPPER.convertValue(payload, SeventhMatrixEntity.class);
 	}
+
+	public static PmLeaveTypeEntity convertToPmLeaveTypeEntity(@Valid SavePmLeaveTypeModel payload) {
+		return MAPPER.convertValue(payload, PmLeaveTypeEntity.class);
+	}
+
 }
