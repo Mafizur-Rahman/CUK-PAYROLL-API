@@ -82,7 +82,6 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 			System.out.println(e);
 		}
 		return null;
-
 	}
 
 	@Override
@@ -207,6 +206,30 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+	
+//	@Override
+//	public List<EmpMastEntity> RetirementListForNextMonthExcel@Valid SosDateModel payload) {
+//		try {
+//			List<Map<String, Object>> output = new ArrayList<>();
+//			List<EmpMastEntity> datas = empMastRepo.findBySosDAte(Sort.by(Sort.Direction.ASC, "sosDate"),
+//					payload.getSosDate());
+//			for (EmpMastEntity data : datas) {
+//				Map<String, Object> finalOutput = new HashMap<>();
+//
+//				String desigShortDesc = pmDesigRepo.findDescBasedOnCode(data.getDesig());
+//
+//				finalOutput.put("empId", data.getEmpId());
+//				finalOutput.put("name", data.getName());
+//				finalOutput.put("desig", desigShortDesc);
+//				finalOutput.put("dtBirth", data.getDtBirth());
+//				finalOutput.put("sosDate", data.getSosDate());
+//
+//				output.add(finalOutput);
+//
+//			}
+//			return new output;
+//
+//	}
 
 	@Override
 	public ResponseDTO PayBillSummary() {
@@ -644,5 +667,99 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.success, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), map.values());
 	}
 
+	public List<PaybillAndOtherEntity> listAll() {
+		return paybillAndOtherRepo.getSSLic();
+	}
+
+	@Override
+	public List<PaybillAndOtherEntity> getGisAll() {	
+		return paybillAndOtherRepo.getGis();
+	}
+
+	@Override
+	public List<RegimentalPaybillEntity> getRegimentalPaybillExcel() {
+		return regimentalPaybillRepo.findAll();
+	}
+
+	@Override
+	public List<PaybillEntity> getPaybillEntityExcel() {
+		
+		return paybillRepo.findAll();
+	}
+
+	@Override
+	public List<PaybillAndOtherEntity> getItaxExcel() {
+		return paybillAndOtherRepo.getByItax();
+	}
+
+	@Override
+	public List<PaybillAndOtherEntity> getCghsRecoveryExcel() {
+		
+		return paybillAndOtherRepo.getCghsRecovery();
+	}
+
+	@Override
+	public List<PaybillAndOtherEntity> getPliExcel() {
+		return paybillAndOtherRepo.getPli();
+	}
+
+	@Override
+	public List<PaybillAndOtherEntity> getMiscRecoveryScheduleExcel() {
+		
+		return paybillAndOtherRepo.getMiscRecoverySchedule();
+	}
+
+	@Override
+	public List<RegimentalPaybillEntity> getCgoClubRecoveryExcel() {
 	
-}
+		return  regimentalPaybillRepo.getCgoClubRecovery();
+	}
+
+	@Override
+	public List<RegimentalPaybillEntity> getEducationLoanExcel() {
+		return regimentalPaybillRepo.getEducationLoan();
+	}
+
+	@Override
+	public List<RegimentalPaybillEntity> getDromiExcel() {
+		return regimentalPaybillRepo.getDromi();
+	}
+
+	@Override
+	public List<RegimentalPaybillEntity> getUnionExcel() {
+		return regimentalPaybillRepo.getUnionn();
+	}
+
+	@Override
+	public List<EmpMastEntity> RetirementListForNextMonthExcel(@Valid SosDateModel payload) {
+		List<EmpMastEntity> output = new ArrayList<>();
+		List<EmpMastEntity> datas = empMastRepo.findBySosDAte(Sort.by(Sort.Direction.ASC, "sosDate"),
+				payload.getSosDate());
+		for (EmpMastEntity data : datas) {
+			EmpMastEntity finalOutput = new EmpMastEntity();
+
+			String desigShortDesc = pmDesigRepo.findDescBasedOnCode(data.getDesig());
+
+			finalOutput.setEmpId(data.getEmpId()); 
+			finalOutput.setName(data.getName());
+			finalOutput.setDesig(desigShortDesc);
+		    finalOutput.setDtBirth(data.getDtBirth());
+		    finalOutput.setSosDate(data.getSosDate());
+			output.add(finalOutput);	
+		}
+		return output;
+	}
+
+	@Override
+	public List<PaybillAndOtherEntity> getNonCghsRecoveryExcel() {
+		
+		return paybillAndOtherRepo.getNonCghsRecovery();
+	}
+
+	@Override
+	public List<RegimentalPaybillEntity> getNGORegimentalPaybillExcel() {
+		return regimentalPaybillRepo.findAll();
+	}
+
+
+	}

@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import admin.payroll.entity.EmpMastEntity;
+import admin.payroll.entity.PaybillAndOtherEntity;
 import admin.payroll.entity.PaybillEntity;
 import admin.payroll.entity.PmGecEntity;
+import admin.payroll.entity.RegimentalPaybillEntity;
 import admin.payroll.models.ClassModel;
 import admin.payroll.models.CodeAndCodeTypeModel;
 import admin.payroll.models.EedMode;
@@ -24,6 +27,9 @@ public interface PaybillAndOtherService {
 	@Transactional
 	ResponseDTO getPayBill();
 
+	@Transactional
+	List<PaybillEntity> getPaybillEntityExcel();
+	
 	@Transactional
 	ResponseDTO payBillByClass(@Valid ClassModel payload);
 
@@ -43,7 +49,12 @@ public interface PaybillAndOtherService {
 	ResponseDTO GetRegimentalPaybill();
 
 	@Transactional
+	List<RegimentalPaybillEntity> getRegimentalPaybillExcel();
+	
+	@Transactional
 	ResponseDTO getItax();
+	@Transactional
+	List<PaybillAndOtherEntity> getItaxExcel();
 
 	@Transactional
 	ResponseDTO getItaxByClass(@Valid ClassModel payload);
@@ -77,10 +88,15 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	ResponseDTO getSSLic();
+	@Transactional
+	List<PaybillAndOtherEntity> listAll();
 
 	@Transactional
 	ResponseDTO getCghsRecovery();
 
+	@Transactional
+	List<PaybillAndOtherEntity> getCghsRecoveryExcel();
+	
 	@Transactional
 	ResponseDTO getCghsRecoveryByClass(@Valid ClassModel payload);
 
@@ -104,6 +120,8 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	ResponseDTO getGis();
+	@Transactional
+	List<PaybillAndOtherEntity> getGisAll();
 
 	@Transactional
 	ResponseDTO getGisByClass(@Valid ClassModel payload);
@@ -134,5 +152,23 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	ResponseDTO getDivisonWiseEmployee();
+	@Transactional
+	List<PaybillAndOtherEntity> getPliExcel();
+	@Transactional
+	List<PaybillAndOtherEntity> getMiscRecoveryScheduleExcel();
+	@Transactional
+	List<RegimentalPaybillEntity> getCgoClubRecoveryExcel();
+	@Transactional
+	List<RegimentalPaybillEntity> getEducationLoanExcel();
+	@Transactional
+	List<RegimentalPaybillEntity> getDromiExcel();
+	@Transactional
+	List<RegimentalPaybillEntity> getUnionExcel();
+	@Transactional
+	List<EmpMastEntity> RetirementListForNextMonthExcel(@Valid SosDateModel payload);
+	@Transactional
+	List<PaybillAndOtherEntity> getNonCghsRecoveryExcel();
+	@Transactional
+	List<RegimentalPaybillEntity> getNGORegimentalPaybillExcel();
 
 }
