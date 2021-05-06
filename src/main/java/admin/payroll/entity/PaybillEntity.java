@@ -22,6 +22,9 @@ public class PaybillEntity implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 	
+	@Column(name = "IFSC")
+	private String ifscCode;
+	
 	@Column(name = "CLASS")
 	private String classs;
 	
