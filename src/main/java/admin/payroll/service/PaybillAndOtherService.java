@@ -171,4 +171,7 @@ public interface PaybillAndOtherService {
 	@Transactional
 	List<RegimentalPaybillEntity> getNGORegimentalPaybillExcel();
 
+	@Transactional
+	List<PaybillEntity> getSalDataForValidationExcel();
+
 }

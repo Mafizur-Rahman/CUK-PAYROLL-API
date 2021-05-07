@@ -39,6 +39,7 @@ import admin.payroll.excel.PliExcelExporter;
 import admin.payroll.excel.MKMYExcelExporter;
 import admin.payroll.excel.RetirementListExcelExporter;
 import admin.payroll.excel.SSLicExcelExporter;
+import admin.payroll.excel.SalaryValidationExcelExporter;
 import admin.payroll.excel.UnionExcelExporter;
 import admin.payroll.models.ClassModel;
 import admin.payroll.models.ResponseDTO;
@@ -60,6 +61,24 @@ public class PaybillAndOtherController {
 	public ResponseDTO payBill() {
 		log.debug("getting getAllCodeMasterData");
 		return paybillAndOtherService.getPayBill();
+	}
+	
+	// salary data validation execl api
+	@GetMapping("/getSalDataForValidationExcel")
+	public void SalaryDataValidationExcelExportToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=salaryValidation_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<PaybillEntity> listUsers = paybillAndOtherService.getSalDataForValidationExcel();
+
+		SalaryValidationExcelExporter excelExporter = new SalaryValidationExcelExporter(listUsers);
+
+		excelExporter.export(response);
 	}
 	@GetMapping("/getBankExcel")
 	public void PayBillExcelExportToExcel(HttpServletResponse response) throws IOException {

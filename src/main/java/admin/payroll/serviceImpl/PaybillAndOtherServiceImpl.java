@@ -762,4 +762,12 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 	}
 
 
+
+	@Override
+	public List<PaybillEntity> getSalDataForValidationExcel() {
+
+		return paybillRepo.findAll();
+	}
+
+
 	}

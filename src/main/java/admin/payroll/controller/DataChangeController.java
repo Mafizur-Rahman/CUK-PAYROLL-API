@@ -26,6 +26,7 @@ import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
+import admin.payroll.models.SavePmPayMasterModel;
 import admin.payroll.service.DataChangeService;
 import admin.payroll.utils.StringConstants;
 
@@ -197,6 +198,16 @@ public class DataChangeController {
 		if (!bindings.hasErrors()) {
 			log.debug("saving getInstallmentRecoveries");
 			return dataChangeServive.getInstallmentRecoveries(payload);
+		} else {
+			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
+		}
+	}
+	
+	@PostMapping("/savePayMaster")
+	public ResponseDTO savePayMaster(@RequestBody @Valid SavePmPayMasterModel payload, BindingResult bindings) {
+		if (!bindings.hasErrors()) {
+			log.debug("saving saveEmployeeData");
+			return dataChangeServive.savePmPayMaster(payload);
 		} else {
 			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}

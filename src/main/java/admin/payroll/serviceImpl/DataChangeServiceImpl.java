@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
+
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import admin.payroll.entity.EmpPmMedEntity;
 import admin.payroll.entity.PmDesigEntity;
 import admin.payroll.entity.PmLoanEntity;
+import admin.payroll.entity.PmPayMasteEntity;
 import admin.payroll.entity.PmPraEntity;
 import admin.payroll.entity.PmRedEntity;
 import admin.payroll.entity.PmSalHdrEntity;
@@ -33,12 +36,14 @@ import admin.payroll.models.GetPayRatesModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
+import admin.payroll.models.SavePmPayMasterModel;
 import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.repo.EmpPmMedRepo;
 import admin.payroll.repo.PmDesigRepo;
 import admin.payroll.repo.PmEedRepo;
 import admin.payroll.repo.PmLoanRepo;
+import admin.payroll.repo.PmPayMasterRepo;
 import admin.payroll.repo.PmPraRepo;
 import admin.payroll.repo.PmRedRepo;
 import admin.payroll.repo.PmSysMasterRepo;
@@ -57,6 +62,8 @@ public class DataChangeServiceImpl implements DataChangeService {
 	PmDesigRepo pmDesigRepo;
 
 	@Autowired
+	PmPayMasterRepo payMasterRepo;
+	@Autowired
 	PmEedRepo pmEedRepo;
 
 	@Autowired
@@ -70,6 +77,9 @@ public class DataChangeServiceImpl implements DataChangeService {
 	
 	@Autowired
 	PmSysMasterRepo pmSysMasterRepo;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 
 	@Override
@@ -650,6 +660,25 @@ public class DataChangeServiceImpl implements DataChangeService {
 	public ResponseDTO checkPayRateExist(EmpAndEdCodeModel model) {
 		Optional<PmPraEntity> pmPra = this.pmPraRepo.checkPayRateExist(model.getEmpId(), model.getEdCode());
 		return new ResponseDTO(StringConstants.success, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), pmPra.isPresent());
+	}
+	
+	@Override
+	public ResponseDTO savePmPayMaster(@Valid SavePmPayMasterModel payload) {
+		try {
+			payload.getPayMasterRows().forEach(row -> {
+				PmPayMasteEntity pmPayMasterData = this.modelMapper.map(row, PmPayMasteEntity.class);
+				pmPayMasterData.setEmpNo(payload.getEmpNo());
+				pmPayMasterData.setPayperiod(payload.getPayperiod());
+				pmPayMasterData.setLogUser(payload.getLogUser());
+				pmPayMasterData.setLogIp(payload.getLogIp());
+				payMasterRepo.save(pmPayMasterData);			});
+					
+			return new ResponseDTO(StringConstants.Saved, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (Exception e) {
+			log.error("saveEmployeeData {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
 
 }

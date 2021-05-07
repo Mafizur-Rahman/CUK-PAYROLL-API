@@ -18,6 +18,7 @@ import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
+import admin.payroll.models.SavePmPayMasterModel;
 
 @Service
 public interface DataChangeService {
@@ -72,5 +73,7 @@ public interface DataChangeService {
 
 	@Transactional
 	ResponseDTO checkPayRateExist(EmpAndEdCodeModel model);
+	@Transactional
+	ResponseDTO savePmPayMaster(@Valid SavePmPayMasterModel payload);
 
 }
