@@ -47,7 +47,7 @@ public class PmLeavePostingEntity {
 	private String toWhichHalf;
 
 	@Column(name = "DAYSNO", length = 4)
-	private String daysNo;
+	private Double daysNo;
 
 	@Column(name = "COMMUTE", length = 1)
 	private String commute;
