@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import admin.payroll.exceptions.InvalidJsonException;
+import admin.payroll.models.CodeModel;
 import admin.payroll.models.EditCurrentMonthEdModel;
 import admin.payroll.models.EditInstalRecovModel;
 import admin.payroll.models.EditPmPraModel;
 import admin.payroll.models.EditRegRecovModel;
 import admin.payroll.models.EmpAndEdCodeModel;
+import admin.payroll.models.EmpNoAndPayPeriodModel;
 import admin.payroll.models.GetCurrentMonthEdModel;
 import admin.payroll.models.GetPayRatesModel;
 import admin.payroll.models.ResponseDTO;
@@ -212,5 +214,20 @@ public class DataChangeController {
 			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
 	}
-
+	
+	@PostMapping("/getByEmpNoAndPayperiod")
+	public ResponseDTO getByEmpNoAndPayperiod(@RequestBody @Valid EmpNoAndPayPeriodModel payload, BindingResult bindings) {
+		if (!bindings.hasErrors()) {
+			log.debug("getting getByEmpNoAndPayperiod");
+			return dataChangeServive.getByEmpNoAndPayperiod(payload);
+		} else {
+			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
+		}
+	}
+	
+	@PostMapping("/deleteByEmpNoAndPayperiodAndEarnindeduction")
+	public ResponseDTO deleteByEmpNoAndPayperiodAndEarnindeduction(@RequestBody @Valid EmpNoAndPayPeriodModel payload, BindingResult bindings) {
+		log.debug("deleting deleteByEmpNoAndPayperiodAndEarnindeduction");
+		return dataChangeServive.deleteByEmpNoAndPayperiodAndEarnindeduction(payload);
+	}
 }

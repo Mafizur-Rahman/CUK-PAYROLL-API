@@ -11,6 +11,7 @@ import admin.payroll.models.EditInstalRecovModel;
 import admin.payroll.models.EditPmPraModel;
 import admin.payroll.models.EditRegRecovModel;
 import admin.payroll.models.EmpAndEdCodeModel;
+import admin.payroll.models.EmpNoAndPayPeriodModel;
 import admin.payroll.models.GetCurrentMonthEdModel;
 import admin.payroll.models.GetPayRatesModel;
 import admin.payroll.models.ResponseDTO;
@@ -75,5 +76,11 @@ public interface DataChangeService {
 	ResponseDTO checkPayRateExist(EmpAndEdCodeModel model);
 	@Transactional
 	ResponseDTO savePmPayMaster(@Valid SavePmPayMasterModel payload);
+	
+	
+	@Transactional
+	ResponseDTO getByEmpNoAndPayperiod(@Valid EmpNoAndPayPeriodModel payload);
+	@Transactional
+	ResponseDTO deleteByEmpNoAndPayperiodAndEarnindeduction(@Valid EmpNoAndPayPeriodModel payload);
 
 }

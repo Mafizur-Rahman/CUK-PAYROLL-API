@@ -17,8 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import admin.payroll.entity.EmpMastEntity;
 import admin.payroll.entity.EmpPmMedEntity;
 import admin.payroll.entity.PmDesigEntity;
+import admin.payroll.entity.PmLeavePostingEntity;
+import admin.payroll.entity.PmLeaveTypeEntity;
 import admin.payroll.entity.PmLoanEntity;
 import admin.payroll.entity.PmPayMasteEntity;
 import admin.payroll.entity.PmPraEntity;
@@ -31,12 +35,15 @@ import admin.payroll.models.EditInstalRecovModel;
 import admin.payroll.models.EditPmPraModel;
 import admin.payroll.models.EditRegRecovModel;
 import admin.payroll.models.EmpAndEdCodeModel;
+import admin.payroll.models.EmpNoAndPayPeriodModel;
 import admin.payroll.models.GetCurrentMonthEdModel;
 import admin.payroll.models.GetPayRatesModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
+import admin.payroll.models.SavePmLeavePostingModel;
 import admin.payroll.models.SavePmPayMasterModel;
+import admin.payroll.models.SavePmPayMasterModel.PayMasterRows;
 import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.repo.EmpPmMedRepo;
@@ -680,5 +687,25 @@ public class DataChangeServiceImpl implements DataChangeService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+	@Override
+	public ResponseDTO getByEmpNoAndPayperiod(@Valid EmpNoAndPayPeriodModel payload) {
+		List<PmPayMasteEntity> list = payMasterRepo.getByEmpNoAndPayperiod(payload.getEmpNo(), payload.getPayperiod());
+		return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(),
+				list);
+	}
 
+	@Override
+	public ResponseDTO deleteByEmpNoAndPayperiodAndEarnindeduction(@Valid EmpNoAndPayPeriodModel payload) {
+		try {		
+			payMasterRepo.deleteByEmpNoAndPayperiodAndEarnindeduction(payload.getEmpNo(), payload.getPayperiod(),payload.getEarningdeduction());
+			return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (Exception e) {
+			log.error("deleteKinMaster {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+	}
+	
 }
+
+	
