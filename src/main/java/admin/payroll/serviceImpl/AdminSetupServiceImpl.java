@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import admin.payroll.config.Convertor;
@@ -57,6 +58,9 @@ public class AdminSetupServiceImpl implements AdminSetupService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Override
 	public ResponseDTO saveUnitSetup(@Valid SavePmUnitSetupModel payload) {
 		try {
@@ -89,6 +93,8 @@ public class AdminSetupServiceImpl implements AdminSetupService {
 
 		try {
 			PmUsersEntity pmUser = Convertor.convertToPmUserEntity(payload);
+			
+			pmUser.setPassword(this.passwordEncoder.encode(pmUser.getPassword()));
 			pmUserRepo.save(pmUser);
 			return new ResponseDTO(StringConstants.Saved, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
 		} catch (Exception e) {

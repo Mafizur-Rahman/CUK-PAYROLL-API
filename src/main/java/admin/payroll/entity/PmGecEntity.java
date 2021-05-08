@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import admin.payroll.utils.DateTimeUtility;
@@ -24,7 +25,8 @@ import lombok.Data;
 public class PmGecEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "gec_seq", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(sequenceName = "gec_seq", name = "gec_seq", allocationSize = 1, initialValue = 1)
 	@Column(name = "ID")
 	private Integer id;
 //	private Integer id = 1000 + new Random().nextInt(9999);

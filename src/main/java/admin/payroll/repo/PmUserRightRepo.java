@@ -17,22 +17,22 @@ public interface PmUserRightRepo extends JpaRepository<PmUserRightsEntity, Integ
 
 	@Query("from PmUserRightsEntity where userId=:userid")
 	List<PmUserRightsEntity> getPmUserRightById(@Param("userid") String s);
-	
+
 	@Query("from PmUserRightsEntity where userid LIKE %:id% or roleid LIKE %:id%")
 	List<PmUserRightsEntity> searchPmUserRightByUserIdOrRoleId(@Param("id") Integer id);
 
 	@Query("from PmUserRightsEntity where userId=:userid")
 	List<List<PmUserRightsEntity>> getPmUserRightByuserId(@Param("userid") Integer userid);
-	
-	 @Transactional
-	 @Modifying
-	 @Query("delete from PmUserRightsEntity  where userId=:userid")
+
+	@Transactional
+	@Modifying
+	@Query("delete from PmUserRightsEntity  where userId=:userid")
 	void deletePmUserRightByuserId(@Param("userid") String userid);
 
+	@Query("SELECT roleId FROM PmUserRightsEntity WHERE userId=:userId")
+	List<String>getRolesByUserId(@Param("userId") String userId);
 	
-
 	// @Query("delete from CLimit l where l.trader.id =:#{#trader.id}")
-	 // void deleteLimitsByTrader(@Param("trader") CTrader trader);
-	
+	// void deleteLimitsByTrader(@Param("trader") CTrader trader);
 
 }
