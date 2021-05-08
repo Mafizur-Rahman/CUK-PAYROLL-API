@@ -769,5 +769,10 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return paybillRepo.findAll();
 	}
 
+	@Override
+	public List<PaybillEntity> getPaymentDataExcel() {
+		return paybillRepo.findAll();
+	}
+
 
 	}

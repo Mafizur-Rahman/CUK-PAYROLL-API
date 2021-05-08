@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,14 @@ import admin.payroll.excel.FamilyRelifFundExcelExporter;
 import admin.payroll.excel.GisExcelExporter;
 import admin.payroll.excel.ItaxExcelExporter;
 import admin.payroll.excel.LPWCExcelExporter;
+import admin.payroll.excel.MKMYExcelExporter;
 import admin.payroll.excel.MiscrecoveryScheduleExcelExporter;
 import admin.payroll.excel.NGOExcelExporter;
 import admin.payroll.excel.NPSExcelExporter;
 import admin.payroll.excel.NonCghsExcelExporter;
 import admin.payroll.excel.PayBillExcelExporter;
+import admin.payroll.excel.PaymentDataExcelExporter;
 import admin.payroll.excel.PliExcelExporter;
-import admin.payroll.excel.MKMYExcelExporter;
 import admin.payroll.excel.RetirementListExcelExporter;
 import admin.payroll.excel.SSLicExcelExporter;
 import admin.payroll.excel.SalaryValidationExcelExporter;
@@ -45,8 +47,6 @@ import admin.payroll.models.ClassModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SosDateModel;
 import admin.payroll.service.PaybillAndOtherService;
-import admin.payroll.utils.UserExcelExporter;
-
 
 @RequestMapping("/payBillandOther")
 @RestController
@@ -62,7 +62,7 @@ public class PaybillAndOtherController {
 		log.debug("getting getAllCodeMasterData");
 		return paybillAndOtherService.getPayBill();
 	}
-	
+
 	// salary data validation execl api
 	@GetMapping("/getSalDataForValidationExcel")
 	public void SalaryDataValidationExcelExportToExcel(HttpServletResponse response) throws IOException {
@@ -80,6 +80,33 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
+	@GetMapping("/getPaymentDataExcel")
+	public void PaymentDataExportToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+		PaybillEntity entity = new PaybillEntity();
+		entity.setGpfNo("BTLHY14635517");
+		entity.setEmpNo("VISVAS");
+		entity.setName("VIMA SHG Society");
+		entity.setBankNo("Visvas Scheme");
+		entity.setNetPay(500.00);
+		entity.setBasic(0.00);
+		entity.setDesig("11/01/2020");
+		entity.setAdharNo("11/30/2020");
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=paymentData_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+		List<PaybillEntity> listUsers = paybillAndOtherService.getPaymentDataExcel();
+		listUsers.add(entity);
+
+		PaymentDataExcelExporter excelExporter = new PaymentDataExcelExporter(listUsers);
+
+		excelExporter.export(response);
+	}
+
 	@GetMapping("/getBankExcel")
 	public void PayBillExcelExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -96,6 +123,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@GetMapping("/getNPSExcel")
 	public void NPSExcelExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -112,6 +140,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@GetMapping("/getLPWCExcel")
 	public void LPWCExcelExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -128,6 +157,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@GetMapping("/payBillAndOther")
 	public ResponseDTO payBillAndOther() {
 		log.debug("getting getAllCodeMasterData");
@@ -157,9 +187,11 @@ public class PaybillAndOtherController {
 		log.debug("getting RetirementListForNextMonth");
 		return paybillAndOtherService.RetirementListForNextMonth(payload);
 	}
+
 	@PostMapping("/RetirementListForNextMonthExcel")
-	
-	public void RetirementexportToExcel(HttpServletResponse response,@RequestBody @Valid SosDateModel payload) throws IOException {
+
+	public void RetirementexportToExcel(HttpServletResponse response, @RequestBody @Valid SosDateModel payload)
+			throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -173,7 +205,7 @@ public class PaybillAndOtherController {
 		RetirementListExcelExporter excelExporter = new RetirementListExcelExporter(listUsers);
 
 		excelExporter.export(response);
-	
+
 	}
 
 	@GetMapping("/PayBillSummary")
@@ -187,6 +219,7 @@ public class PaybillAndOtherController {
 		log.debug("getting GetRegimentalPaybill");
 		return paybillAndOtherService.GetRegimentalPaybill();
 	}
+
 	@GetMapping("/GetMKMYRegimentalPaybillExcel")
 	public void MKMYRegimentalPaybillExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -203,6 +236,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@GetMapping("/GetFamilyRelifFundExcel")
 	public void FamilyRelifFundExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -219,6 +253,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@GetMapping("/GetNGORegimentalPaybillExcel")
 	public void NGORegimentalPaybillExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -242,6 +277,7 @@ public class PaybillAndOtherController {
 		log.debug("getting income tax form PaybillEntity");
 		return paybillAndOtherService.getItax();
 	}
+
 	@GetMapping("/getItaxExcel")
 	public void ItaxExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -258,6 +294,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getItaxByClass")
 	public ResponseDTO getItaxByClass(@RequestBody @Valid ClassModel payload, BindingResult bindings) {
 		log.debug("getting getItaxByClass");
@@ -286,6 +323,7 @@ public class PaybillAndOtherController {
 		log.debug("getting data from misCsch from regPayBillEntity");
 		return paybillAndOtherService.getMiscRecoverySchedule();
 	}
+
 	@GetMapping("/gettMiscRecoveryScheduleExcel")
 	public void MiscRecoveryScheduleExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -302,6 +340,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getMiscRecoveryScheduleByClass")
 	public ResponseDTO getMiscRecoveryScheduleByClass(@RequestBody ClassModel payload) {
 		log.debug("getting data from misCsch from regPayBillEntity");
@@ -314,6 +353,7 @@ public class PaybillAndOtherController {
 		log.debug("gettting data from regPayBillEntity where education loan is present");
 		return paybillAndOtherService.getEducationLoan();
 	}
+
 	@GetMapping("/getEducationLoanExcel")
 	public void EducationLoanExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -330,6 +370,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	//
 	@PostMapping("/getEducationLoanByClass")
 	public ResponseDTO getEducationLoanByClass(@RequestBody ClassModel payload) {
@@ -360,6 +401,7 @@ public class PaybillAndOtherController {
 		log.debug("getting cgoClub from regPayBillEntity");
 		return paybillAndOtherService.getCgoClubRecovery();
 	}
+
 	@GetMapping("/getCgoClubRecoveryExcel")
 	public void CgoClubRecoveryExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -376,13 +418,13 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getCgoClubRecoveryByClass")
 	public ResponseDTO getCgoClubRecoveryByClass(@RequestBody ClassModel payload) {
 		log.debug("getting cgoClub from regPayBillEntity");
 		return paybillAndOtherService.getCgoClubRecoveryByClass(payload);
 	}
 
-	
 	// get all data from regPayBillEntity where mkManch present
 
 	@GetMapping("/getMahilaKalyanManch")
@@ -406,9 +448,9 @@ public class PaybillAndOtherController {
 		log.debug("getting licFee from regPayBillEntity");
 		return paybillAndOtherService.getSSLic();
 	}
-	
+
 	// Excel generate in SSLIC
-		
+
 	@GetMapping("/getSSLicExcel")
 	public void SSLicexportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -425,7 +467,7 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
-	
+
 	@PostMapping("/getSSLicByClass")
 	public ResponseDTO getSSLicByClass(@RequestBody ClassModel payload) {
 		log.debug("getting licFee from regPayBillEntity");
@@ -438,7 +480,7 @@ public class PaybillAndOtherController {
 		log.debug("getting cghs from regPayBillEntity");
 		return paybillAndOtherService.getCghsRecovery();
 	}
-	
+
 	@GetMapping("/getCghsRecoveryExcel")
 	public void CghsRecoveryExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -455,18 +497,19 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getCghsRecoveryByClass")
 	public ResponseDTO getCghsRecoveryByClass(@RequestBody @Valid ClassModel payload, BindingResult bindings) {
 		log.debug("getting getCghsRecoveryByClass");
 		return paybillAndOtherService.getCghsRecoveryByClass(payload);
 	}
 
-	
 	@GetMapping("/getNonCghsRecovery")
 	public ResponseDTO getNonCghsRecovery() {
 		log.debug("getting non cghs from regPayBillEntity");
 		return paybillAndOtherService.getNonCghsRecovery();
 	}
+
 	@GetMapping("/getNonCghsRecoveryExcel")
 	public void NonCghsExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -497,6 +540,7 @@ public class PaybillAndOtherController {
 		log.debug("getting unionn from regPayBillEntity");
 		return paybillAndOtherService.getUnionn();
 	}
+
 	@GetMapping("/getUnionExcel")
 	public void UnionExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -510,16 +554,19 @@ public class PaybillAndOtherController {
 		UnionExcelExporter excelExporter = new UnionExcelExporter(listUsers);
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getUnionnByClass")
 	public ResponseDTO getUnionnByClass(@RequestBody ClassModel payload) {
 		log.debug("getting unionn from regPayBillEntity");
 		return paybillAndOtherService.getUnionnByClass(payload);
 	}
+
 	@GetMapping("/getDromi")
 	public ResponseDTO getDromi() {
 		log.debug("getting unionn from regPayBillEntity");
 		return paybillAndOtherService.getDromi();
 	}
+
 	@GetMapping("/getDromiExcel")
 	public void DromiExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -533,16 +580,18 @@ public class PaybillAndOtherController {
 		DromiExcelExporter excelExporter = new DromiExcelExporter(listUsers);
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getDromiByClass")
 	public ResponseDTO getDromiByClass(@RequestBody ClassModel payload) {
 		log.debug("getting unionn from regPayBillEntity");
 		return paybillAndOtherService.getDromiByClass(payload);
 	}
-	
+
 	@GetMapping("/getPli")
 	public ResponseDTO getPli() {
 		return paybillAndOtherService.getPli();
 	}
+
 	@GetMapping("/getPliExcel")
 	public void PliExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -559,16 +608,17 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getPliByClass")
 	public ResponseDTO getPli(@RequestBody ClassModel payload) {
 		return paybillAndOtherService.getPliByClass(payload);
 	}
-	
+
 	@GetMapping("/getGis")
 	public ResponseDTO getGis() {
 		return paybillAndOtherService.getGis();
 	}
-	
+
 	@GetMapping("/getGisExcel")
 	public void GisexportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -585,17 +635,18 @@ public class PaybillAndOtherController {
 
 		excelExporter.export(response);
 	}
+
 	@PostMapping("/getGisByClass")
 	public ResponseDTO getGisByClass(@RequestBody @Valid ClassModel payload, BindingResult bindings) {
 		log.debug("getting getGisByClass");
 		return paybillAndOtherService.getGisByClass(payload);
 	}
-	
+
 	@GetMapping("/getPunchingMedia")
 	public ResponseDTO getPunchingMedia() {
 		return paybillAndOtherService.getPunchingMedia();
 	}
-	
+
 	@GetMapping("/getDivisonWiseEmployee")
 	public ResponseDTO getDivisonWiseEmployee() {
 		return paybillAndOtherService.getDivisonWiseEmployee();

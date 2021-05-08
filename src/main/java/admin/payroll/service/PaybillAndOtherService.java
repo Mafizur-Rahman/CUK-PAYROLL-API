@@ -173,5 +173,7 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	List<PaybillEntity> getSalDataForValidationExcel();
+	@Transactional
+	List<PaybillEntity> getPaymentDataExcel();
 
 }
