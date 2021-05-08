@@ -34,10 +34,10 @@ public class AuthenticationController {
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	
+
 	@Autowired
-	private PmUserRightRepo pmUserRightRepository; 
-	
+	private PmUserRightRepo pmUserRightRepository;
+
 	/**
 	 * Authencates a user on behalf of username and password and generates a JWT
 	 * access token
@@ -51,18 +51,24 @@ public class AuthenticationController {
 			BindingResult bindingResult) {
 		if (!bindingResult.hasErrors()) {
 			try {
-				Authentication authentication = new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+				Authentication authentication = new UsernamePasswordAuthenticationToken(
+						authenticationRequest.getUsername(), authenticationRequest.getPassword());
 				this.authenticationManager.authenticate(authentication);
-				
+
 				// at this point user is successfully authenticated
 				String token = this.jwtTokenUtil.generateJwtToken(authenticationRequest.getUsername());
-				List<PmUserRightsEntity> userRights = this.pmUserRightRepository.getPmUserRightById(authenticationRequest.getUsername());
-				return new ResponseEntity<>(new AuthenticationResponse(token, true, "Authentication Successfull", userRights), HttpStatus.OK);
-			
+				List<PmUserRightsEntity> userRights = this.pmUserRightRepository
+						.getPmUserRightById(authenticationRequest.getUsername());
+				return new ResponseEntity<>(
+						new AuthenticationResponse(token, true, "Authentication Successfull", userRights),
+						HttpStatus.OK);
+
 			} catch (BadCredentialsException e) {
-				return new ResponseEntity<>(new AuthenticationResponse(false, "Invalid Username or Password"), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new AuthenticationResponse(false, "Invalid Username or Password"),
+						HttpStatus.OK);
 			}
 		}
-		return new ResponseEntity<>(new AuthenticationResponse(false, "Authentication Request Not Valid"), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new AuthenticationResponse(false, "Authentication Request Not Valid"),
+				HttpStatus.OK);
 	}
 }
