@@ -46,6 +46,7 @@ import admin.payroll.entity.PmEmpDatesEntity;
 import admin.payroll.entity.PmEmpDocsEntity;
 import admin.payroll.entity.PmGecEntity;
 import admin.payroll.entity.PmKinFeeEntity;
+
 import admin.payroll.entity.PmQualificationEntity;
 import admin.payroll.enums.APISTATUS;
 import admin.payroll.models.CodeModel;
@@ -61,6 +62,7 @@ import admin.payroll.models.SaveEmployeeDatasModel;
 import admin.payroll.models.SaveEmployeeQualificationModel;
 import admin.payroll.models.SaveKINFeeMasterModel;
 import admin.payroll.models.SaveKINMasterModel;
+import admin.payroll.models.SavePmPayMasterModel;
 import admin.payroll.repo.AddressRepo;
 import admin.payroll.repo.EmpMastRepo;
 import admin.payroll.repo.KinRepo;
@@ -71,6 +73,7 @@ import admin.payroll.repo.PmEmpDatesRepo;
 import admin.payroll.repo.PmEmpDocsRepo;
 import admin.payroll.repo.PmGecRepo;
 import admin.payroll.repo.PmKinFeeRepo;
+import admin.payroll.repo.PmPayMasterRepo;
 import admin.payroll.repo.PmPayMatrixRepo;
 import admin.payroll.repo.PmQualificationRepo;
 import admin.payroll.service.CommonService;
@@ -90,7 +93,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
 
 	@Autowired
 	AddressRepo addressRepo;
-
+	
 	@Autowired
 	PmKinFeeRepo pmKinFeeRepo;
 
@@ -140,6 +143,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 
 	}
+
 
 	@Override
 	public ResponseDTO saveAddress(@Valid SaveEmployeeAddressModel payload) {
@@ -1128,5 +1132,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(StringConstants.fail, APISTATUS.FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null));
 	}
+
+
 
 }

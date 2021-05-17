@@ -3,7 +3,10 @@ package admin.payroll.repo;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -21,5 +24,10 @@ public interface PmLoanRepo extends JpaRepository<PmLoanEntity, Integer> {
 
 	PmLoanEntity findByEmpNoAndEarningDeductionAndRefNoAndSancDateAndStartYearMm(String empNo, String earningDeduction,
 			String refNo, Date sancDate, String startYearMm);
+
+	@Modifying
+	@Transactional
+	@Query(value = "delete from PmLoanEntity e where e.empNo=:empNo  AND e.earningDeduction=:earningDeduction AND e.refNo=:refNo AND e.sancDate=:sancDate")
+	int deletePmLoan(String empNo, String earningDeduction, String refNo, Date sancDate);
 
 }

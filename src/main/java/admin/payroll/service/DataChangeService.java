@@ -5,7 +5,6 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
-import admin.payroll.models.CodeAndDescModel;
 import admin.payroll.models.EditCurrentMonthEdModel;
 import admin.payroll.models.EditInstalRecovModel;
 import admin.payroll.models.EditPmPraModel;
@@ -14,12 +13,16 @@ import admin.payroll.models.EmpAndEdCodeModel;
 import admin.payroll.models.EmpNoAndPayPeriodModel;
 import admin.payroll.models.GetCurrentMonthEdModel;
 import admin.payroll.models.GetPayRatesModel;
+import admin.payroll.models.PmLoanModel;
+import admin.payroll.models.PmMedModel;
+import admin.payroll.models.PmParaModel;
+import admin.payroll.models.PmRedModel;
 import admin.payroll.models.ResponseDTO;
-import admin.payroll.models.SavePmPraModel;
-import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
 import admin.payroll.models.SavePmPayMasterModel;
+import admin.payroll.models.SavePmPraModel;
+import admin.payroll.models.SaveRegRecovModel;
 
 @Service
 public interface DataChangeService {
@@ -74,13 +77,26 @@ public interface DataChangeService {
 
 	@Transactional
 	ResponseDTO checkPayRateExist(EmpAndEdCodeModel model);
+
 	@Transactional
 	ResponseDTO savePmPayMaster(@Valid SavePmPayMasterModel payload);
-	
-	
+
 	@Transactional
 	ResponseDTO getByEmpNoAndPayperiod(@Valid EmpNoAndPayPeriodModel payload);
+
 	@Transactional
-	ResponseDTO deleteByEmpNoAndPayperiodAndEarnindeduction(@Valid EmpNoAndPayPeriodModel payload);
+	ResponseDTO deletePmPara(@Valid PmParaModel payload);
+
+	@Transactional
+	ResponseDTO deletePmLoan(@Valid PmLoanModel payload);
+
+	@Transactional
+	ResponseDTO deletePmRed(@Valid PmRedModel payload);
+
+	@Transactional
+	ResponseDTO deletePmPayMaster(@Valid EmpNoAndPayPeriodModel payload);
+
+	@Transactional
+	ResponseDTO deletePmMed(@Valid PmMedModel payload);
 
 }

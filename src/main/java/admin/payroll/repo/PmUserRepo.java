@@ -20,7 +20,7 @@ public interface PmUserRepo extends JpaRepository<PmUsersEntity, Integer>{
 	List<PmUsersEntity> findPmUserByName(@Param("userName") String userName);
 	
 	Optional<PmUsersEntity> findByLoginId(String loginId);
-	
 	Optional<PmUsersEntity> findByUserName(String username);
+
 	
 }

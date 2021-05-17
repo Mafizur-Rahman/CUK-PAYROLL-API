@@ -110,7 +110,7 @@ public class PmLoanEntity implements Serializable {
 	public PmLoanEntity() {
 		super();
 	}
-	
+
 	@PreUpdate
 	@PrePersist
 	public void onUpdate() {

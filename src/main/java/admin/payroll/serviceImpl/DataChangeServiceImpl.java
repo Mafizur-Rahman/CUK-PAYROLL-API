@@ -18,16 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import admin.payroll.entity.EmpMastEntity;
 import admin.payroll.entity.EmpPmMedEntity;
 import admin.payroll.entity.PmDesigEntity;
-import admin.payroll.entity.PmLeavePostingEntity;
-import admin.payroll.entity.PmLeaveTypeEntity;
 import admin.payroll.entity.PmLoanEntity;
 import admin.payroll.entity.PmPayMasteEntity;
 import admin.payroll.entity.PmPraEntity;
 import admin.payroll.entity.PmRedEntity;
-import admin.payroll.entity.PmSalHdrEntity;
 import admin.payroll.entity.PmSysMasterEntity;
 import admin.payroll.enums.APISTATUS;
 import admin.payroll.models.EditCurrentMonthEdModel;
@@ -38,12 +34,14 @@ import admin.payroll.models.EmpAndEdCodeModel;
 import admin.payroll.models.EmpNoAndPayPeriodModel;
 import admin.payroll.models.GetCurrentMonthEdModel;
 import admin.payroll.models.GetPayRatesModel;
+import admin.payroll.models.PmLoanModel;
+import admin.payroll.models.PmMedModel;
+import admin.payroll.models.PmParaModel;
+import admin.payroll.models.PmRedModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
-import admin.payroll.models.SavePmLeavePostingModel;
 import admin.payroll.models.SavePmPayMasterModel;
-import admin.payroll.models.SavePmPayMasterModel.PayMasterRows;
 import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.repo.EmpPmMedRepo;
@@ -81,22 +79,21 @@ public class DataChangeServiceImpl implements DataChangeService {
 
 	@Autowired
 	PmLoanRepo pmLoanRepo;
-	
+
 	@Autowired
 	PmSysMasterRepo pmSysMasterRepo;
-	
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
 
 	@Override
 	public ResponseDTO checkSalaryProcessedOrNot() {
 		try {
-			boolean data = false ;
-			List<PmSysMasterEntity> datas =pmSysMasterRepo.findAll();
+			boolean data = false;
+			List<PmSysMasterEntity> datas = pmSysMasterRepo.findAll();
 			for (PmSysMasterEntity sysdata : datas) {
-				if(sysdata.getMStatus().equals("O"))
-				data = true;
+				if (sysdata.getMStatus().equals("O"))
+					data = true;
 			}
 			return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), data);
 		} catch (Exception e) {
@@ -131,8 +128,9 @@ public class DataChangeServiceImpl implements DataChangeService {
 				SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
 				Date fromDate = (Date) formatter3.parse(fromDateList.get(i).toString());
 				Date officeOrderDate = null;
-				//if (!(officeOrderDateList.get(i) == null && !(officeOrderDateList.get(i) == "")))
-				if (officeOrderDateList.get(i) != null &&  !"".equals(officeOrderDateList.get(i)))
+				// if (!(officeOrderDateList.get(i) == null && !(officeOrderDateList.get(i) ==
+				// "")))
+				if (officeOrderDateList.get(i) != null && !"".equals(officeOrderDateList.get(i)))
 					officeOrderDate = formatter3.parse(officeOrderDateList.get(i).toString());
 				if (payload.getType().equalsIgnoreCase("edCode")) {
 					List empNos = payload.getEmpNos();
@@ -146,8 +144,8 @@ public class DataChangeServiceImpl implements DataChangeService {
 				String remarks = null;
 				String regRemarks = null;
 				if (checkOldData != null) {
-					//if (!(toDateList.get(i) == null && !(officeOrderDateList.get(i) == "")))
-					if (toDateList.get(i) != null &&  !"".equals(toDateList.get(i)))
+					// if (!(toDateList.get(i) == null && !(officeOrderDateList.get(i) == "")))
+					if (toDateList.get(i) != null && !"".equals(toDateList.get(i)))
 						toDate = (Date) formatter3.parse(toDateList.get(i).toString());
 					checkOldData.setToDate(toDate);
 					checkOldData.setDesigCode(desigCodeList.get(i).toString());
@@ -156,7 +154,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 					checkOldData.setRate(Double.parseDouble(rateList.get(i).toString()));
 					checkOldData.setOfficeOrderDate(officeOrderDate);
 					if (OfficeOrderNoList.get(i) != null)
-					checkOldData.setOfficeOrderNo(OfficeOrderNoList.get(i).toString());
+						checkOldData.setOfficeOrderNo(OfficeOrderNoList.get(i).toString());
 					if (!(remarkList.get(i) == null))
 						remarks = remarkList.get(i).toString();
 					checkOldData.setRemarks(remarks);
@@ -538,7 +536,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 				map.put("startYearMm", data.getStartYearMm());
 				map.put("endYearMm", data.getEndYearMm());
 				map.put("amt", data.getAmt());
-				map.put("paycalPeriod",data.getPaycalPeriod());
+				map.put("paycalPeriod", data.getPaycalPeriod());
 				list.add(map);
 			}
 
@@ -666,9 +664,10 @@ public class DataChangeServiceImpl implements DataChangeService {
 	@Override
 	public ResponseDTO checkPayRateExist(EmpAndEdCodeModel model) {
 		Optional<PmPraEntity> pmPra = this.pmPraRepo.checkPayRateExist(model.getEmpId(), model.getEdCode());
-		return new ResponseDTO(StringConstants.success, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), pmPra.isPresent());
+		return new ResponseDTO(StringConstants.success, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(),
+				pmPra.isPresent());
 	}
-	
+
 	@Override
 	public ResponseDTO savePmPayMaster(@Valid SavePmPayMasterModel payload) {
 		try {
@@ -678,8 +677,9 @@ public class DataChangeServiceImpl implements DataChangeService {
 				pmPayMasterData.setPayperiod(payload.getPayperiod());
 				pmPayMasterData.setLogUser(payload.getLogUser());
 				pmPayMasterData.setLogIp(payload.getLogIp());
-				payMasterRepo.save(pmPayMasterData);			});
-					
+				payMasterRepo.save(pmPayMasterData);
+			});
+
 			return new ResponseDTO(StringConstants.Saved, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
 		} catch (Exception e) {
 			log.error("saveEmployeeData {}", e);
@@ -687,25 +687,75 @@ public class DataChangeServiceImpl implements DataChangeService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
 	@Override
 	public ResponseDTO getByEmpNoAndPayperiod(@Valid EmpNoAndPayPeriodModel payload) {
 		List<PmPayMasteEntity> list = payMasterRepo.getByEmpNoAndPayperiod(payload.getEmpNo(), payload.getPayperiod());
-		return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(),
-				list);
+		return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), list);
 	}
 
 	@Override
-	public ResponseDTO deleteByEmpNoAndPayperiodAndEarnindeduction(@Valid EmpNoAndPayPeriodModel payload) {
-		try {		
-			payMasterRepo.deleteByEmpNoAndPayperiodAndEarnindeduction(payload.getEmpNo(), payload.getPayperiod(),payload.getEarningdeduction());
-			return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+	public ResponseDTO deletePmPara(@Valid PmParaModel payload) {
+		try {
+			pmPraRepo.deletePmPara(payload.getEmpNo(), payload.getEarningDeduction(), payload.getFromDate());
+			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
 		} catch (Exception e) {
 			log.error("deleteKinMaster {}", e);
 		}
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-	
-}
 
-	
+	@Override
+	public ResponseDTO deletePmMed(@Valid PmMedModel payload) {
+		try {
+			empPmMedRepo.deletePmMad(payload.getEmpNo(), payload.getEarningDeduction(), payload.getPayPeriod());
+			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (Exception e) {
+			log.error("deleteKinMaster {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+	}
+
+	@Override
+	public ResponseDTO deletePmLoan(@Valid PmLoanModel payload) {
+		try {
+			pmLoanRepo.deletePmLoan(payload.getEmpNo(), payload.getEarningDeduction(), payload.getRefNo(),
+					payload.getSancDate());
+			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (Exception e) {
+			log.error("deleteKinMaster {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+	}
+
+	@Override
+	public ResponseDTO deletePmRed(@Valid PmRedModel payload) {
+		try {
+			pmRedRepo.deletePmRed(payload.getEmpNo(), payload.getEarningDeduction(), payload.getRefNo(),
+					payload.getRefDate());
+			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (Exception e) {
+			log.error("deleteKinMaster {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+	}
+
+	@Override
+	public ResponseDTO deletePmPayMaster(@Valid EmpNoAndPayPeriodModel payload) {
+		try {
+			payMasterRepo.deletePmPayMaster(payload.getEmpNo(), payload.getEarningdeduction(), payload.getPayperiod());
+			return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (
+
+		Exception e) {
+			log.error("deleteKinMaster {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+	}
+
+}

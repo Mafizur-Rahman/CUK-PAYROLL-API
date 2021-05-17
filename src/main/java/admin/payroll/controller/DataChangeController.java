@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import admin.payroll.exceptions.InvalidJsonException;
-import admin.payroll.models.CodeModel;
 import admin.payroll.models.EditCurrentMonthEdModel;
 import admin.payroll.models.EditInstalRecovModel;
 import admin.payroll.models.EditPmPraModel;
@@ -23,12 +22,16 @@ import admin.payroll.models.EmpAndEdCodeModel;
 import admin.payroll.models.EmpNoAndPayPeriodModel;
 import admin.payroll.models.GetCurrentMonthEdModel;
 import admin.payroll.models.GetPayRatesModel;
+import admin.payroll.models.PmLoanModel;
+import admin.payroll.models.PmMedModel;
+import admin.payroll.models.PmParaModel;
+import admin.payroll.models.PmRedModel;
 import admin.payroll.models.ResponseDTO;
-import admin.payroll.models.SavePmPraModel;
-import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.models.SaveCurrentMonthEdModel;
 import admin.payroll.models.SaveInstalRecovModel;
 import admin.payroll.models.SavePmPayMasterModel;
+import admin.payroll.models.SavePmPraModel;
+import admin.payroll.models.SaveRegRecovModel;
 import admin.payroll.service.DataChangeService;
 import admin.payroll.utils.StringConstants;
 
@@ -40,14 +43,12 @@ public class DataChangeController {
 
 	@Autowired
 	DataChangeService dataChangeServive;
-	
-	
+
 	@GetMapping("/checkSalaryProcessedOrNot")
 	public ResponseDTO checkSalaryProcessedOrNot() {
-			log.debug("saving getPayRates");
-			return dataChangeServive.checkSalaryProcessedOrNot();
+		log.debug("saving getPayRates");
+		return dataChangeServive.checkSalaryProcessedOrNot();
 	}
-
 
 	@PostMapping("/getPayRates")
 	public ResponseDTO getPayRates(@RequestBody @Valid GetPayRatesModel payload, BindingResult bindings) {
@@ -108,12 +109,11 @@ public class DataChangeController {
 		return dataChangeServive.deletePayRate(id);
 	}
 
-	
 	@PostMapping("/checkPayRateExist")
 	public ResponseDTO checkPayRateExist(@RequestBody EmpAndEdCodeModel model) {
 		return this.dataChangeServive.checkPayRateExist(model);
 	}
-	
+
 //Table used is PM_MED	
 	@PostMapping("/saveCurrentMonthED")
 	public ResponseDTO saveCurrentMonthED(@RequestBody @Valid SaveCurrentMonthEdModel payload, BindingResult bindings) {
@@ -125,9 +125,6 @@ public class DataChangeController {
 		}
 	}
 
-	
-	
-	
 	public ResponseDTO editCurrentMonthED(@RequestBody @Valid EditCurrentMonthEdModel payload, BindingResult bindings) {
 		if (!bindings.hasErrors()) {
 			log.debug("saving editCurrentMonthED");
@@ -204,7 +201,7 @@ public class DataChangeController {
 			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
 	}
-	
+
 	@PostMapping("/savePayMaster")
 	public ResponseDTO savePayMaster(@RequestBody @Valid SavePmPayMasterModel payload, BindingResult bindings) {
 		if (!bindings.hasErrors()) {
@@ -214,9 +211,10 @@ public class DataChangeController {
 			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
 	}
-	
+
 	@PostMapping("/getByEmpNoAndPayperiod")
-	public ResponseDTO getByEmpNoAndPayperiod(@RequestBody @Valid EmpNoAndPayPeriodModel payload, BindingResult bindings) {
+	public ResponseDTO getByEmpNoAndPayperiod(@RequestBody @Valid EmpNoAndPayPeriodModel payload,
+			BindingResult bindings) {
 		if (!bindings.hasErrors()) {
 			log.debug("getting getByEmpNoAndPayperiod");
 			return dataChangeServive.getByEmpNoAndPayperiod(payload);
@@ -224,10 +222,34 @@ public class DataChangeController {
 			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
 	}
-	
-	@PostMapping("/deleteByEmpNoAndPayperiodAndEarnindeduction")
-	public ResponseDTO deleteByEmpNoAndPayperiodAndEarnindeduction(@RequestBody @Valid EmpNoAndPayPeriodModel payload, BindingResult bindings) {
-		log.debug("deleting deleteByEmpNoAndPayperiodAndEarnindeduction");
-		return dataChangeServive.deleteByEmpNoAndPayperiodAndEarnindeduction(payload);
+
+	@PostMapping("/deletePmPara")
+	public ResponseDTO deletePmPara(@RequestBody @Valid PmParaModel payload, BindingResult bindings) {
+		log.debug("deleting deletePmPara");
+		return dataChangeServive.deletePmPara(payload);
+	}
+
+	@PostMapping("/deletePmMed")
+	public ResponseDTO deletePmMed(@RequestBody @Valid PmMedModel payload, BindingResult bindings) {
+		log.debug("deleting deletePmMed");
+		return dataChangeServive.deletePmMed(payload);
+	}
+
+	@PostMapping("/deletePmRed")
+	public ResponseDTO deletePmRed(@RequestBody @Valid PmRedModel payload, BindingResult bindings) {
+		log.debug("deleting deletePmRed");
+		return dataChangeServive.deletePmRed(payload);
+	}
+
+	@PostMapping("/deletePmLoan")
+	public ResponseDTO deletePmLoan(@RequestBody @Valid PmLoanModel payload, BindingResult bindings) {
+		log.debug("deleting deletePmLoan");
+		return dataChangeServive.deletePmLoan(payload);
+	}
+
+	@PostMapping("/deletePmPayMaster")
+	public ResponseDTO deletePmPayMaster(@RequestBody @Valid EmpNoAndPayPeriodModel payload, BindingResult bindings) {
+		log.debug("deleting deletePmLoan");
+		return dataChangeServive.deletePmPayMaster(payload);
 	}
 }

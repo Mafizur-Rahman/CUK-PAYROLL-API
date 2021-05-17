@@ -3,6 +3,7 @@ package admin.payroll.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import admin.payroll.entity.PmGecEntity;
 import admin.payroll.entity.PmUserRightsEntity;
+import admin.payroll.entity.PmUsersEntity;
 import admin.payroll.exceptions.InvalidJsonException;
 import admin.payroll.models.AuthenticationResponseDto;
 import admin.payroll.models.CodeAndCodeTypeModel;
 import admin.payroll.models.EedMode;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SelectBoxModel;
+import admin.payroll.repo.PmUserRepo;
 import admin.payroll.models.LoginModel;
 import admin.payroll.service.CommonService;
 import admin.payroll.utils.LdapClass;
@@ -40,7 +43,8 @@ public class CommonController {
 	@Autowired
 	LdapClass ldapClass;
 
-	
+	@Autowired
+	private PmUserRepo pmUserRepo;
 	/**
 	 * 
 	 * This End Point is for login in GTRE Intranet via LDAP.
@@ -72,7 +76,7 @@ public class CommonController {
 	 * This is End Point is for Development Login For Application.
 	 */
 	@PostMapping("/ldapLogin")
-	public AuthenticationResponseDto login(@RequestBody @Valid LoginModel authReqeustModel,
+	public AuthenticationResponseDto ldaplogin(@RequestBody @Valid LoginModel authReqeustModel,
 			BindingResult bindingResults) {
 		@Data
 		@AllArgsConstructor
@@ -109,6 +113,41 @@ public class CommonController {
 		return new AuthenticationResponseDto(false, null, "Authentication Fail! User Not Found!", null);
 
 	}
+	
+//	@PostMapping("/login")
+//	public AuthenticationResponseDto login(@RequestBody @Valid LoginModel authReqeustModel,
+//			BindingResult bindingResults) {
+//		@Data
+//		@AllArgsConstructor
+//		class Account {
+//			String username;
+//			String password;
+//		}
+//		PmUsersEntity accounts = pmUserRepo.findByUserName1(authReqeustModel.getUsername());
+//
+//		// Check if this user exist in the temporary ldap.
+//		if (accounts.equals(authReqeustModel.getUsername())) {
+//			Account account = new Account(null, null);
+//			account.setUsername(authReqeustModel.getUsername());
+//			account.setPassword(authReqeustModel.getPassword());
+//			// if user exist then check the credentials
+//			if (account.password.equals(authReqeustModel.getPassword())) {
+//
+//				// if user credentials matched then check user exists in our DB.
+//				if (!this.commonService.checkUserExistance(account.getUsername())) {
+//					return new AuthenticationResponseDto(false, null, "User Does not exist", null);
+//				}
+//
+//				// fetch user rights from database.
+//				List<PmUserRightsEntity> pmUserRights = this.commonService
+//						.getUserRightsByLoginId(account.getUsername());
+//				return new AuthenticationResponseDto(true, account.getUsername(), "Authentication Success",
+//						pmUserRights);
+//			}
+//		}
+//		return new AuthenticationResponseDto(false, null, "Authentication Fail! User Not Found!", null);
+//
+//	}
 
 	@PostMapping("/getSelectBox")
 	public Object EDCodeMaster(@RequestBody @Valid SelectBoxModel payload, BindingResult bindings) {

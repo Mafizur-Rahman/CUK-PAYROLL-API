@@ -132,6 +132,7 @@ public class EmployeeManagementController {
 
 	}
 
+
 	@PostMapping("/saveEmployeeData")
 	public ResponseDTO saveEmployeeData(@RequestBody @Valid SaveEmployeeDatasModel payload, BindingResult bindings) {
 		if (!bindings.hasErrors()) {
@@ -141,7 +142,6 @@ public class EmployeeManagementController {
 			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
 	}
-
 	@PostMapping("/getAddress")
 	public ResponseDTO getAddress(@RequestBody @Valid EmployeeProfileModel payload, BindingResult bindings) {
 		if (!bindings.hasErrors()) {

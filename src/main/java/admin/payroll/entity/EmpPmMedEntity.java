@@ -31,7 +31,7 @@ public class EmpPmMedEntity implements Serializable {
 	private String empNo;
 
 	@Id
-	@Column(name = "earningdeduction", length = 50)
+	@Column(name = "earningDeduction", length = 50)
 	private String earningDeduction;
 
 	@Id
@@ -62,7 +62,7 @@ public class EmpPmMedEntity implements Serializable {
 
 	@Column(name = "LOGIP")
 	private String logIp;
-	
+
 	@PreUpdate
 	@PrePersist
 	public void onUpdate() {

@@ -37,5 +37,4 @@ public class SavePmUsersModel {
 	
 	private String logIp;
 	
-	
 }
