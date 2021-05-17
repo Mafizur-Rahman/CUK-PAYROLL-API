@@ -12,12 +12,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import admin.payroll.entity.EmpMastEntity;
 import admin.payroll.entity.PaybillAndOtherEntity;
@@ -44,6 +47,7 @@ import admin.payroll.excel.SSLicExcelExporter;
 import admin.payroll.excel.SalaryValidationExcelExporter;
 import admin.payroll.excel.UnionExcelExporter;
 import admin.payroll.models.ClassModel;
+import admin.payroll.models.DataForValidationModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SosDateModel;
 import admin.payroll.service.PaybillAndOtherService;
@@ -64,6 +68,14 @@ public class PaybillAndOtherController {
 	}
 
 	// salary data validation execl api
+	// data for validation grid view
+	@GetMapping("/getSalDataForValidation")
+	public ResponseDTO getSalDataForValidation() {
+		log.debug("getting getAllCodeMasterData");
+		return paybillAndOtherService.getSalDataForValidation();
+	}
+
+	// data for validation excel
 	@GetMapping("/getSalDataForValidationExcel")
 	public void SalaryDataValidationExcelExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -74,13 +86,20 @@ public class PaybillAndOtherController {
 		String headerValue = "attachment; filename=salaryValidation_" + currentDateTime + ".xlsx";
 		response.setHeader(headerKey, headerValue);
 
-		List<PaybillEntity> listUsers = paybillAndOtherService.getSalDataForValidationExcel();
+		List<DataForValidationModel> listUsers = paybillAndOtherService.getSalDataForValidationExcel();
 
 		SalaryValidationExcelExporter excelExporter = new SalaryValidationExcelExporter(listUsers);
 
 		excelExporter.export(response);
 	}
 
+	// dbt01 read excel file
+	@PostMapping(path = "/readDbt01ExcelFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseDTO readExcelFile(@RequestPart MultipartFile excelFile) {
+		return this.paybillAndOtherService.readDbt01ExcelFile(excelFile);
+	}
+
+//payment validated data
 	@GetMapping("/getPaymentDataExcel")
 	public void PaymentDataExportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

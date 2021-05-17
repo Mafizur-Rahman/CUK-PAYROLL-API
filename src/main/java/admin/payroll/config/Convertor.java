@@ -24,6 +24,7 @@ import admin.payroll.entity.PmKinFeeEntity;
 import admin.payroll.entity.PmLeaveTypeEntity;
 import admin.payroll.entity.PmLoanEntity;
 import admin.payroll.entity.PmPayMatrixEntity;
+import admin.payroll.entity.PmPfmsTempEntity;
 import admin.payroll.entity.PmPraEntity;
 import admin.payroll.entity.PmQualificationEntity;
 import admin.payroll.entity.PmRateEntity;
@@ -54,6 +55,7 @@ import admin.payroll.models.SaveInstalRecovModel;
 import admin.payroll.models.SaveKINFeeMasterModel;
 import admin.payroll.models.SaveKINMasterModel;
 import admin.payroll.models.SavePayMatrixModel;
+import admin.payroll.models.SavePfmsTempModel;
 import admin.payroll.models.SavePmLeaveTypeModel;
 import admin.payroll.models.SavePmPraModel;
 import admin.payroll.models.SavePmRolesModel;
@@ -190,6 +192,10 @@ public class Convertor {
 
 	public static PmLeaveTypeEntity convertToPmLeaveTypeEntity(@Valid SavePmLeaveTypeModel payload) {
 		return MAPPER.convertValue(payload, PmLeaveTypeEntity.class);
+	}
+
+	public static PmPfmsTempEntity convertToPmPfmsTempEntity(@Valid SavePfmsTempModel payload) {
+		return MAPPER.convertValue(payload, PmPfmsTempEntity.class);
 	}
 
 }

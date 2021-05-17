@@ -67,7 +67,7 @@ public class GpfServiceImpl implements GpfService {
 
 	@Autowired
 	GpfCloseBalRepo gpfCloseBalRepo;
-	
+
 	public static final Logger log = LoggerFactory.getLogger(GpfServiceImpl.class);
 
 	@Override
@@ -269,7 +269,7 @@ public class GpfServiceImpl implements GpfService {
 	@Override
 	public ResponseDTO readExcelFile(MultipartFile excelFile) {
 		if (excelFile != null) {
-			try (XSSFWorkbook workbook = new XSSFWorkbook(excelFile.getInputStream())){
+			try (XSSFWorkbook workbook = new XSSFWorkbook(excelFile.getInputStream())) {
 				List<List<Object>> excelResponse = new ArrayList<>();
 				XSSFSheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rows = sheet.iterator();
@@ -280,17 +280,18 @@ public class GpfServiceImpl implements GpfService {
 					while (cells.hasNext()) {
 						Cell cell = cells.next();
 						switch (cell.getCellType().toString()) {
-							case "NUMERIC":
-								responseRow.add(cell.getNumericCellValue());
-								break;
-							case "STRING":
-								responseRow.add(cell.getStringCellValue());
-								break;
+						case "NUMERIC":
+							responseRow.add(cell.getNumericCellValue());
+							break;
+						case "STRING":
+							responseRow.add(cell.getStringCellValue());
+							break;
 						}
 					}
 					excelResponse.add(responseRow);
 				}
-				return new ResponseDTO("Excel Reading Successful", APISTATUS.SUCCESS, HttpStatus.ACCEPTED, excelResponse);
+				return new ResponseDTO("Excel Reading Successful", APISTATUS.SUCCESS, HttpStatus.ACCEPTED,
+						excelResponse);
 			} catch (Exception e) {
 				log.debug("readExcelFile {}", e);
 			}
@@ -302,8 +303,8 @@ public class GpfServiceImpl implements GpfService {
 	public ResponseDTO saveGpfCloseBal(@Valid GpfClosingSaveModel gpfClosingSaveModel) {
 		try {
 			gpfClosingSaveModel.getEmployeeData().forEach(data -> {
-				HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+				HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+						.currentRequestAttributes()).getRequest();
 				GpfCloseBalEntity gpfCloseBal = new GpfCloseBalEntity();
 				gpfCloseBal.setFinancialYear(gpfClosingSaveModel.getFinancialYear());
 				gpfCloseBal.setEmployeeId(data.getEmployeeId());
@@ -313,9 +314,8 @@ public class GpfServiceImpl implements GpfService {
 				gpfCloseBal.setLogIp(request.getRemoteAddr());
 				this.gpfCloseBalRepo.save(gpfCloseBal);
 			});
-			return new ResponseDTO(StringConstants.Saved, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
-		}
-		catch (Exception e) {
+			return new ResponseDTO(StringConstants.Uploaded, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
+		} catch (Exception e) {
 			log.debug("saveGpfCloseBal {}", e);
 		}
 		return new ResponseDTO(StringConstants.FAIL, APISTATUS.FAIL, HttpStatus.INTERNAL_SERVER_ERROR.value(), null);

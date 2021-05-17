@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -13,17 +14,15 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
-
-import admin.payroll.entity.PaybillEntity;
+import admin.payroll.models.DataForValidationModel;
 
 public class SalaryValidationExcelExporter {
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
-	private List<PaybillEntity> listUsers;
+	private List<DataForValidationModel> listUsers;
 
-	public SalaryValidationExcelExporter(List<PaybillEntity> listUsers) {
-		this.listUsers = listUsers;
+	public SalaryValidationExcelExporter(List<DataForValidationModel> listUsers2) {
+		this.listUsers = listUsers2;
 		workbook = new XSSFWorkbook();
 	}
 
@@ -37,7 +36,7 @@ public class SalaryValidationExcelExporter {
 		font.setBold(true);
 		font.setFontHeight(16);
 		style.setFont(font);
-	
+
 		createCell(row, 0, "Full Name In English", style);
 		createCell(row, 1, "Full Name in Recognized Official Language", style);
 		createCell(row, 2, "Gender", style);
@@ -45,18 +44,17 @@ public class SalaryValidationExcelExporter {
 		createCell(row, 4, "Address line 2", style);
 		createCell(row, 5, "Address line 3", style);
 		createCell(row, 6, "District", style);
-		createCell(row, 7, "State", style);	
+		createCell(row, 7, "State", style);
 		createCell(row, 8, "Country", style);
 		createCell(row, 9, "Bank Name", style);
 		createCell(row, 10, "IFSCCode", style);
-		createCell(row, 11, "Account Number", style);		
+		createCell(row, 11, "Account Number", style);
 		createCell(row, 12, "Aadhaar Number", style);
 		createCell(row, 13, "Pincode", style);
 		createCell(row, 14, "Scheme Specific ID", style);
 		createCell(row, 15, "Center Share Payment Amount", style);
 		createCell(row, 16, "State Share Payment Amount", style);
-	
-		
+
 	}
 
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
@@ -66,11 +64,16 @@ public class SalaryValidationExcelExporter {
 			cell.setCellValue((Integer) value);
 		} else if (value instanceof Boolean) {
 			cell.setCellValue((Boolean) value);
-		} else if(value instanceof Double) {
+		} else if (value instanceof Double) {
 			cell.setCellValue((Double) value);
-		}
-		else {
+		} else if (value instanceof String) {
 			cell.setCellValue((String) value);
+		} else if (value instanceof Long) {
+			cell.setCellValue((Long) value);
+		} else if (value instanceof Null) {
+			cell.setCellValue((""));
+		} else {
+			cell.setCellValue(("") );
 		}
 		cell.setCellStyle(style);
 	}
@@ -83,29 +86,27 @@ public class SalaryValidationExcelExporter {
 		font.setFontHeight(14);
 		style.setFont(font);
 
-		for (PaybillEntity user : listUsers) {
+		for (DataForValidationModel user : listUsers) {
 			Row row = sheet.createRow(rowCount++);
 			int columnCount = 0;
-			
+
 			createCell(row, columnCount++, user.getName(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBankNo(), style);
+			createCell(row, columnCount++, "", style);
+			createCell(row, columnCount++, user.getGender(), style);
+			createCell(row, columnCount++, user.getCaddrss1(), style);
+			createCell(row, columnCount++, user.getCaddrss2(), style);
+			createCell(row, columnCount++, user.getCaddrss3(), style);
+			createCell(row, columnCount++, user.getCdistrict(), style);
+			createCell(row, columnCount++, user.getState2(), style);
+			createCell(row, columnCount++, user.getNationality(), style);
+			createCell(row, columnCount++, user.getBankName(), style);
 			createCell(row, columnCount++, user.getIfscCode(), style);
-			createCell(row, columnCount++, user.getBankNoNew(), style);
+			createCell(row, columnCount++, user.getBanknoNew(), style);
 			createCell(row, columnCount++, user.getAdharNo(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getNetPay(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			
-	
+			createCell(row, columnCount++, user.getCpinCode(), style);
+			createCell(row, columnCount++, "", style);
+			createCell(row, columnCount++, user.getNetpay(), style);
+			createCell(row, columnCount++, "", style);
 
 		}
 	}

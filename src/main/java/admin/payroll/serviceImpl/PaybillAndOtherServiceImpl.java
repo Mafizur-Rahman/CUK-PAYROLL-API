@@ -2,23 +2,25 @@ package admin.payroll.serviceImpl;
 
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.validation.Valid;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import admin.payroll.entity.EmpMastEntity;
 import admin.payroll.entity.PaybillAndOtherEntity;
@@ -29,6 +31,7 @@ import admin.payroll.entity.PmUnitSetupEntity;
 import admin.payroll.entity.RegimentalPaybillEntity;
 import admin.payroll.enums.APISTATUS;
 import admin.payroll.models.ClassModel;
+import admin.payroll.models.DataForValidationModel;
 import admin.payroll.models.PunchingMediaModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SosDateModel;
@@ -66,7 +69,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 
 	@Autowired
 	PmDesigRepo pmDesigRepo;
-	
+
 	@Autowired
 	PmSalHdrRepo pmSalHdrRepo;
 
@@ -206,7 +209,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-	
+
 //	@Override
 //	public List<EmpMastEntity> RetirementListForNextMonthExcel@Valid SosDateModel payload) {
 //		try {
@@ -294,7 +297,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-	
+
 	@Override
 	public ResponseDTO getItaxByClass(@Valid ClassModel payload) {
 		try {
@@ -306,8 +309,6 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-
-
 
 	@Override
 	public ResponseDTO getNps() {
@@ -357,6 +358,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
 	@Override
 	public ResponseDTO getEducationLoan() {
 		try {
@@ -380,6 +382,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
 	@Override
 	public ResponseDTO getIbLoan() {
 		try {
@@ -416,7 +419,6 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
 
-	
 	@Override
 	public ResponseDTO getCgoClubRecoveryByClass(ClassModel payload) {
 		try {
@@ -428,6 +430,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
 	@Override
 	public ResponseDTO getMahilaKalyanManch() {
 		try {
@@ -475,7 +478,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-	
+
 	@Override
 	public ResponseDTO getCghsRecovery() {
 		try {
@@ -487,14 +490,14 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-	
+
 	@Override
 	public ResponseDTO getCghsRecoveryByClass(@Valid ClassModel payload) {
 		try {
 			List<PaybillAndOtherEntity> list = paybillAndOtherRepo.getCghsRecoveryByClass(payload.getClasss());
 			return new ResponseDTO(StringConstants.SUCCESS, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), list);
 		} catch (Exception e) {
-			log.error("error while featching cgsh {}",e);
+			log.error("error while featching cgsh {}", e);
 		}
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
@@ -535,6 +538,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
 	@Override
 	public ResponseDTO getDromi() {
 		try {
@@ -558,6 +562,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
 	@Override
 	public ResponseDTO getPli() {
 		try {
@@ -570,7 +575,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
-	
+
 	@Override
 	public ResponseDTO getPliByClass(ClassModel payload) {
 		try {
@@ -626,8 +631,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		try {
 			PunchingMediaModel model = this.paybillAndOtherRepo.getPunchingMedia();
 			return new ResponseDTO(StringConstants.success, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), model);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("error while fetching punching media");
 		}
 		return new ResponseDTO(StringConstants.fail, APISTATUS.FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null);
@@ -636,26 +640,24 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 	@Override
 	public ResponseDTO getDivisonWiseEmployee() {
 		List<PmSalHdrEntity> list = pmSalHdrRepo.findAll();
-		
+
 		@Data
 		class Model {
-			 String divison;
-			 int count = 0;
-			 List<String> names = new ArrayList<>();
+			String divison;
+			int count = 0;
+			List<String> names = new ArrayList<>();
 		}
-		
-		
+
 		Map<String, Model> map = new TreeMap<>();
-		
-		for(PmSalHdrEntity data: list) {
-			Sort sort=Sort.by("division");
-			EmpMastEntity empdata= empMastRepo.getNameByempId(data.getEmpNo(),sort);
+
+		for (PmSalHdrEntity data : list) {
+			Sort sort = Sort.by("division");
+			EmpMastEntity empdata = empMastRepo.getNameByempId(data.getEmpNo(), sort);
 			if (map.containsKey(empdata.getDivision())) {
 				Model m = map.get(empdata.getDivision());
 				m.count++;
 				m.names.add(empdata.getName());
-			}
-			else {
+			} else {
 				Model m = new Model();
 				m.divison = empdata.getDivision();
 				m.count++;
@@ -663,7 +665,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 				map.put(empdata.getDivision(), m);
 			}
 		}
-		
+
 		return new ResponseDTO(StringConstants.success, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), map.values());
 	}
 
@@ -672,7 +674,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 	}
 
 	@Override
-	public List<PaybillAndOtherEntity> getGisAll() {	
+	public List<PaybillAndOtherEntity> getGisAll() {
 		return paybillAndOtherRepo.getGis();
 	}
 
@@ -683,7 +685,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 
 	@Override
 	public List<PaybillEntity> getPaybillEntityExcel() {
-		
+
 		return paybillRepo.findAll();
 	}
 
@@ -694,7 +696,7 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 
 	@Override
 	public List<PaybillAndOtherEntity> getCghsRecoveryExcel() {
-		
+
 		return paybillAndOtherRepo.getCghsRecovery();
 	}
 
@@ -705,14 +707,14 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 
 	@Override
 	public List<PaybillAndOtherEntity> getMiscRecoveryScheduleExcel() {
-		
+
 		return paybillAndOtherRepo.getMiscRecoverySchedule();
 	}
 
 	@Override
 	public List<RegimentalPaybillEntity> getCgoClubRecoveryExcel() {
-	
-		return  regimentalPaybillRepo.getCgoClubRecovery();
+
+		return regimentalPaybillRepo.getCgoClubRecovery();
 	}
 
 	@Override
@@ -740,19 +742,19 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 
 			String desigShortDesc = pmDesigRepo.findDescBasedOnCode(data.getDesig());
 
-			finalOutput.setEmpId(data.getEmpId()); 
+			finalOutput.setEmpId(data.getEmpId());
 			finalOutput.setName(data.getName());
 			finalOutput.setDesig(desigShortDesc);
-		    finalOutput.setDtBirth(data.getDtBirth());
-		    finalOutput.setSosDate(data.getSosDate());
-			output.add(finalOutput);	
+			finalOutput.setDtBirth(data.getDtBirth());
+			finalOutput.setSosDate(data.getSosDate());
+			output.add(finalOutput);
 		}
 		return output;
 	}
 
 	@Override
 	public List<PaybillAndOtherEntity> getNonCghsRecoveryExcel() {
-		
+
 		return paybillAndOtherRepo.getNonCghsRecovery();
 	}
 
@@ -761,12 +763,17 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return regimentalPaybillRepo.findAll();
 	}
 
-
+	@Override
+	public ResponseDTO getSalDataForValidation() {
+//		List<PaybillEntity> list = paybillRepo.findAll();
+		List<DataForValidationModel> list = pmSalHdrRepo.DataForValidation();
+		return new ResponseDTO(StringConstants.SUCCESS, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), list);
+	}
 
 	@Override
-	public List<PaybillEntity> getSalDataForValidationExcel() {
-
-		return paybillRepo.findAll();
+	public List<DataForValidationModel> getSalDataForValidationExcel() {
+		return pmSalHdrRepo.DataForValidation();
+//		return paybillRepo.findAll();
 	}
 
 	@Override
@@ -774,5 +781,39 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 		return paybillRepo.findAll();
 	}
 
-
+	@Override
+	public ResponseDTO readDbt01ExcelFile(MultipartFile excelFile) {
+		if (excelFile != null) {
+			try (XSSFWorkbook workbook = new XSSFWorkbook(excelFile.getInputStream())) {
+				List<List<Object>> excelResponse = new ArrayList<>();
+				XSSFSheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rows = sheet.iterator();
+				while (rows.hasNext()) {
+					List<Object> responseRow = new ArrayList<>();
+					Row row = rows.next();
+					Iterator<Cell> cells = row.cellIterator();
+					while (cells.hasNext()) {
+						Cell cell = cells.next();
+						switch (cell.getCellType().toString()) {
+						case "NUMERIC":
+							responseRow.add(cell.getNumericCellValue());
+							break;
+						case "STRING":
+							responseRow.add(cell.getStringCellValue());
+							break;
+						case "BLANK":
+							responseRow.add(cell.getCellComment());
+						}
+					}
+					excelResponse.add(responseRow);
+				}
+				return new ResponseDTO("Excel Reading Successful", APISTATUS.SUCCESS, HttpStatus.ACCEPTED,
+						excelResponse);
+			} catch (Exception e) {
+				log.debug("readExcelFile {}", e);
+			}
+		}
+		return new ResponseDTO(StringConstants.FAIL, APISTATUS.FAIL, HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 	}
+
+}

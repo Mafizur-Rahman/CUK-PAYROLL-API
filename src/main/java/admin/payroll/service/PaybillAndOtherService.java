@@ -1,23 +1,19 @@
 package admin.payroll.service;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import admin.payroll.entity.EmpMastEntity;
 import admin.payroll.entity.PaybillAndOtherEntity;
 import admin.payroll.entity.PaybillEntity;
-import admin.payroll.entity.PmGecEntity;
 import admin.payroll.entity.RegimentalPaybillEntity;
 import admin.payroll.models.ClassModel;
-import admin.payroll.models.CodeAndCodeTypeModel;
-import admin.payroll.models.EedMode;
+import admin.payroll.models.DataForValidationModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SosDateModel;
 
@@ -29,7 +25,7 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	List<PaybillEntity> getPaybillEntityExcel();
-	
+
 	@Transactional
 	ResponseDTO payBillByClass(@Valid ClassModel payload);
 
@@ -50,9 +46,10 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	List<RegimentalPaybillEntity> getRegimentalPaybillExcel();
-	
+
 	@Transactional
 	ResponseDTO getItax();
+
 	@Transactional
 	List<PaybillAndOtherEntity> getItaxExcel();
 
@@ -88,6 +85,7 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	ResponseDTO getSSLic();
+
 	@Transactional
 	List<PaybillAndOtherEntity> listAll();
 
@@ -96,7 +94,7 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	List<PaybillAndOtherEntity> getCghsRecoveryExcel();
-	
+
 	@Transactional
 	ResponseDTO getCghsRecoveryByClass(@Valid ClassModel payload);
 
@@ -120,6 +118,7 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	ResponseDTO getGis();
+
 	@Transactional
 	List<PaybillAndOtherEntity> getGisAll();
 
@@ -152,28 +151,44 @@ public interface PaybillAndOtherService {
 
 	@Transactional
 	ResponseDTO getDivisonWiseEmployee();
+
 	@Transactional
 	List<PaybillAndOtherEntity> getPliExcel();
+
 	@Transactional
 	List<PaybillAndOtherEntity> getMiscRecoveryScheduleExcel();
+
 	@Transactional
 	List<RegimentalPaybillEntity> getCgoClubRecoveryExcel();
+
 	@Transactional
 	List<RegimentalPaybillEntity> getEducationLoanExcel();
+
 	@Transactional
 	List<RegimentalPaybillEntity> getDromiExcel();
+
 	@Transactional
 	List<RegimentalPaybillEntity> getUnionExcel();
+
 	@Transactional
 	List<EmpMastEntity> RetirementListForNextMonthExcel(@Valid SosDateModel payload);
+
 	@Transactional
 	List<PaybillAndOtherEntity> getNonCghsRecoveryExcel();
+
 	@Transactional
 	List<RegimentalPaybillEntity> getNGORegimentalPaybillExcel();
 
 	@Transactional
-	List<PaybillEntity> getSalDataForValidationExcel();
+	ResponseDTO getSalDataForValidation();
+
+	@Transactional
+	List<DataForValidationModel> getSalDataForValidationExcel();
+
 	@Transactional
 	List<PaybillEntity> getPaymentDataExcel();
+
+	@Transactional
+	ResponseDTO readDbt01ExcelFile(MultipartFile excelFile);
 
 }
