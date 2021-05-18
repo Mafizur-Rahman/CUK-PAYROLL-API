@@ -30,4 +30,8 @@ public interface PmLoanRepo extends JpaRepository<PmLoanEntity, Integer> {
 	@Query(value = "delete from PmLoanEntity e where e.empNo=:empNo  AND e.earningDeduction=:earningDeduction AND e.refNo=:refNo AND e.sancDate=:sancDate")
 	int deletePmLoan(String empNo, String earningDeduction, String refNo, Date sancDate);
 
+//	@Query("From PmLoanEntity e where e.empNo=:empNo  AND e.earningDeduction=:earningDeduction AND e.refNo=:refNo AND e.sancDate=:sancDate ")
+//	PmLoanEntity deletePmLoan(@Param("empNo") String empNo, @Param("earningDeduction") String earningDeduction,
+//			@Param("refNo") String refNo, @Param("sancDate") LocalDate sancDate);
+
 }

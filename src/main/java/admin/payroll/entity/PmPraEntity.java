@@ -3,6 +3,7 @@ package admin.payroll.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -78,16 +79,15 @@ public class PmPraEntity implements Serializable {
 
 	@Column(name = "REG_REMARK")
 	private String regRemarks;
-	
+
 	@Column(name = "PAYCALPERIOD")
 	private String paycallPeriod;
-	
+
 	@PreUpdate
 	@PrePersist
 	public void onUpdate() {
 		this.logDate = DateTimeUtility.getCurrentDate();
 		this.logTime = DateTimeUtility.getCurrentTimeString();
 	}
-	
-	
+
 }

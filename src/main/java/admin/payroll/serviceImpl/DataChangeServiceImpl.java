@@ -180,7 +180,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 					pmPraEntity.setEarningDeduction(earningDeduction);
 					pmPraEntity.setLogIp(logIp);
 					pmPraEntity.setLogUser(logUser);
-					pmPraEntity.setFromDate(fromDate);
+					// pmPraEntity.setFromDate(fromDate);
 					pmPraRepo.save(pmPraEntity);
 				}
 			}
@@ -572,7 +572,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 			Date officeOrderedDate = (Date) formatter3.parse(payload.getOfficeOrderDate().toString());
 			Date toDate = (Date) formatter3.parse(payload.getToDate().toString());
 			data.setDesigCode(payload.getDesigCode());
-			data.setFromDate(fromDate);
+			// data.setFromDate(fromDate);
 			data.setOfficeOrderDate(officeOrderedDate);
 			data.setOfficeOrderNo(payload.getOfficeOrderNo());
 			data.setPmCell(payload.getPmCell());
@@ -648,7 +648,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 			data.setRateRecovery(Double.parseDouble(payload.getRateRecovery()));
 			data.setRefNo(payload.getRefNo());
 			data.setSancAmt(Double.parseDouble(payload.getSancAmt()));
-			data.setSancDate(sancDate);
+			// data.setSancDate(sancDate);
 			data.setStartYearMm(payload.getStartYearMm());
 			data.setTotInstalment(Double.parseDouble(payload.getTotInstalment()));
 			pmLoanRepo.save(data);
@@ -697,7 +697,9 @@ public class DataChangeServiceImpl implements DataChangeService {
 	@Override
 	public ResponseDTO deletePmPara(@Valid PmParaModel payload) {
 		try {
-			pmPraRepo.deletePmPara(payload.getEmpNo(), payload.getEarningDeduction(), payload.getFromDate());
+			SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
+			Date sancDate = (Date) formatter3.parse(payload.getFromDate().toString());
+			pmPraRepo.deletePmPara(payload.getEmpNo(), payload.getEarningDeduction(), sancDate);
 			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
 		} catch (Exception e) {
 			log.error("deleteKinMaster {}", e);
@@ -720,9 +722,12 @@ public class DataChangeServiceImpl implements DataChangeService {
 
 	@Override
 	public ResponseDTO deletePmLoan(@Valid PmLoanModel payload) {
+
 		try {
-			pmLoanRepo.deletePmLoan(payload.getEmpNo(), payload.getEarningDeduction(), payload.getRefNo(),
-					payload.getSancDate());
+			SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
+			Date sancDate = (Date) formatter3.parse(payload.getSancDate().toString());
+			pmLoanRepo.deletePmLoan(payload.getEmpNo(), payload.getEarningDeduction(), payload.getRefNo(), sancDate);
+
 			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
 		} catch (Exception e) {
 			log.error("deleteKinMaster {}", e);
@@ -734,8 +739,9 @@ public class DataChangeServiceImpl implements DataChangeService {
 	@Override
 	public ResponseDTO deletePmRed(@Valid PmRedModel payload) {
 		try {
-			pmRedRepo.deletePmRed(payload.getEmpNo(), payload.getEarningDeduction(), payload.getRefNo(),
-					payload.getRefDate());
+			SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
+			Date refDate = (Date) formatter3.parse(payload.getRefDate().toString());
+			pmRedRepo.deletePmRed(payload.getEmpNo(), payload.getEarningDeduction(), payload.getRefNo(), refDate);
 			return new ResponseDTO(StringConstants.Deleted, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), null);
 		} catch (Exception e) {
 			log.error("deleteKinMaster {}", e);

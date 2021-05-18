@@ -1,7 +1,5 @@
 package admin.payroll.models;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data
@@ -12,5 +10,5 @@ public class PmRedModel {
 	private String earningDeduction;
 
 	private String refNo;
-	private Date refDate;
+	private String refDate;
 }
