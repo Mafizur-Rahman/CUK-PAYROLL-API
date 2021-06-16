@@ -180,7 +180,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 					pmPraEntity.setEarningDeduction(earningDeduction);
 					pmPraEntity.setLogIp(logIp);
 					pmPraEntity.setLogUser(logUser);
-					// pmPraEntity.setFromDate(fromDate);
+					pmPraEntity.setFromDate(fromDate);
 					pmPraRepo.save(pmPraEntity);
 				}
 			}
@@ -572,7 +572,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 			Date officeOrderedDate = (Date) formatter3.parse(payload.getOfficeOrderDate().toString());
 			Date toDate = (Date) formatter3.parse(payload.getToDate().toString());
 			data.setDesigCode(payload.getDesigCode());
-			// data.setFromDate(fromDate);
+			data.setFromDate(fromDate);
 			data.setOfficeOrderDate(officeOrderedDate);
 			data.setOfficeOrderNo(payload.getOfficeOrderNo());
 			data.setPmCell(payload.getPmCell());
@@ -648,7 +648,7 @@ public class DataChangeServiceImpl implements DataChangeService {
 			data.setRateRecovery(Double.parseDouble(payload.getRateRecovery()));
 			data.setRefNo(payload.getRefNo());
 			data.setSancAmt(Double.parseDouble(payload.getSancAmt()));
-			// data.setSancDate(sancDate);
+			data.setSancDate(sancDate);
 			data.setStartYearMm(payload.getStartYearMm());
 			data.setTotInstalment(Double.parseDouble(payload.getTotInstalment()));
 			pmLoanRepo.save(data);

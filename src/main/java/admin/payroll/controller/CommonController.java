@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +13,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import admin.payroll.entity.PmGecEntity;
 import admin.payroll.entity.PmUserRightsEntity;
-import admin.payroll.entity.PmUsersEntity;
 import admin.payroll.exceptions.InvalidJsonException;
 import admin.payroll.models.AuthenticationResponseDto;
 import admin.payroll.models.CodeAndCodeTypeModel;
 import admin.payroll.models.EedMode;
+import admin.payroll.models.LoginModel;
 import admin.payroll.models.ResponseDTO;
 import admin.payroll.models.SelectBoxModel;
 import admin.payroll.repo.PmUserRepo;
-import admin.payroll.models.LoginModel;
 import admin.payroll.service.CommonService;
 import admin.payroll.utils.LdapClass;
 import admin.payroll.utils.StringConstants;
@@ -48,8 +47,8 @@ public class CommonController {
 	/**
 	 * 
 	 * This End Point is for login in GTRE Intranet via LDAP.
-	 * */
-	
+	 */
+
 //	@PostMapping("/ldapLogin")
 //	public AuthenticationResponseDto ldapLogin(@RequestBody @Valid LoginModel payload, BindingResult binding) {
 //
@@ -76,7 +75,7 @@ public class CommonController {
 	 * This is End Point is for Development Login For Application.
 	 */
 	@PostMapping("/ldapLogin")
-	public AuthenticationResponseDto ldaplogin(@RequestBody @Valid LoginModel authReqeustModel,
+	public AuthenticationResponseDto login(@RequestBody @Valid LoginModel authReqeustModel,
 			BindingResult bindingResults) {
 		@Data
 		@AllArgsConstructor
@@ -113,7 +112,7 @@ public class CommonController {
 		return new AuthenticationResponseDto(false, null, "Authentication Fail! User Not Found!", null);
 
 	}
-	
+
 //	@PostMapping("/login")
 //	public AuthenticationResponseDto login(@RequestBody @Valid LoginModel authReqeustModel,
 //			BindingResult bindingResults) {
