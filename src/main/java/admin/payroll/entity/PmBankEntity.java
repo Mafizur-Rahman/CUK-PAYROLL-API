@@ -1,7 +1,7 @@
 package admin.payroll.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,23 +18,23 @@ import lombok.Data;
 
 public class PmBankEntity {
 
-    @Id
+	@Id
 	@Column(name = "BANKCODE")
 	private String bankCode;
-	
+
 	@Column(name = "BANKNAME")
 	private String bankName;
-	
+
 	@Column(name = "IFSCCODE")
 	private String ifscCode;
-	
+
 	@Column(name = "BRANCHCODE")
 	private String branchCode;
-	
-	@Column(name="MICRCODE")
+
+	@Column(name = "MICRCODE")
 	private String micrCode;
-	
-	@Column(name=" BANKPANNUMBER")
+
+	@Column(name = " BANKPANNUMBER")
 	private String bankPanNumber;
 
 	@Column(name = "HBABANK")
@@ -72,7 +72,7 @@ public class PmBankEntity {
 
 	@Column(name = "LOGIP")
 	private String logIp;
-	
+
 	@PreUpdate
 	@PrePersist
 	public void onUpdate() {

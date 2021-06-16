@@ -12,4 +12,7 @@ public interface PfmsService {
 	@Transactional
 	ResponseDTO uploadDbt01ToTemp(@Valid SavePfmsTempModel payload);
 
+	@Transactional
+	ResponseDTO validateDbt01();
+
 }

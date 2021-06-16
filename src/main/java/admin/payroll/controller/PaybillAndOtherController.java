@@ -105,20 +105,20 @@ public class PaybillAndOtherController {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
-		PaybillEntity entity = new PaybillEntity();
-		entity.setGpfNo("BTLHY14635517");
-		entity.setEmpNo("VISVAS");
-		entity.setName("VIMA SHG Society");
-		entity.setBankNo("Visvas Scheme");
-		entity.setNetPay(500.00);
-		entity.setBasic(0.00);
-		entity.setDesig("11/01/2020");
-		entity.setAdharNo("11/30/2020");
+		DataForValidationModel entity = new DataForValidationModel();
+//		// entity.setGpfNo("BTLHY14635517");
+//		entity.setEmpNo("VISVAS");
+//		entity.setName("VIMA SHG Society");
+//		entity.setBankNo("Visvas Scheme");
+//		entity.setNetPay(500.00);
+//		entity.setBasic(0.00);
+//		entity.setDesig("11/01/2020");
+//		entity.setAdharNo("11/30/2020");
 
 		String headerKey = "Content-Disposition";
 		String headerValue = "attachment; filename=paymentData_" + currentDateTime + ".xlsx";
 		response.setHeader(headerKey, headerValue);
-		List<PaybillEntity> listUsers = paybillAndOtherService.getPaymentDataExcel();
+		List<DataForValidationModel> listUsers = paybillAndOtherService.getPaymentDataExcel();
 		listUsers.add(entity);
 
 		PaymentDataExcelExporter excelExporter = new PaymentDataExcelExporter(listUsers);

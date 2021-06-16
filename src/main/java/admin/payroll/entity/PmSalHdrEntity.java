@@ -18,7 +18,6 @@ public class PmSalHdrEntity {
 	@Column(name = "EMPNO")
 	private String empNo;
 
-	
 	@Column(name = "PAYCALPERIOD")
 	private String paycalPeriod;
 
@@ -105,6 +104,8 @@ public class PmSalHdrEntity {
 
 	@Column(name = "NETPAY  ")
 	private Double netPay;
+	@Column(name = "BENEFICIARY_CODE")
+	private String beneficiaryCode;
 
 	@Column(name = "LOGDATE")
 	private Date logDate;

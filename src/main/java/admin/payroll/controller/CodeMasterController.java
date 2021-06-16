@@ -1,5 +1,9 @@
 package admin.payroll.controller;
 
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import admin.payroll.exceptions.InvalidJsonException;
+import admin.payroll.models.CodeAndDescModel;
+import admin.payroll.models.CodeListAndCodeTypeModel;
+import admin.payroll.models.CodeModel;
 import admin.payroll.models.DesignationCodeModel;
 import admin.payroll.models.EditSeventhMatrixModel;
 import admin.payroll.models.EmployeeID;
-import admin.payroll.models.CodeModel;
-import admin.payroll.models.CodeAndDescModel;
-import admin.payroll.models.CodeListAndCodeTypeModel;
 import admin.payroll.models.GetBankDetails;
 import admin.payroll.models.GetPayMatrixModel;
 import admin.payroll.models.GetSeventhMatrixModel;
@@ -31,10 +35,6 @@ import admin.payroll.models.SaveRateMasterModel;
 import admin.payroll.models.SaveSeventhMatrixModel;
 import admin.payroll.service.CodeMasterService;
 import admin.payroll.utils.StringConstants;
-
-import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping(value = "/codeMaster")
@@ -295,6 +295,13 @@ public class CodeMasterController {
 
 	}
 
+	// GET BANK NAME BY BANKCODE-17-05-2021
+	@GetMapping("/getBankName")
+	public ResponseDTO getAllEmployeeNameAndId() {
+		log.debug("getting AllEmployeeNameAndId");
+		return codeMasterService.getAllBankName();
+	}
+
 //tested
 	@PostMapping("/checkBankCodeExist")
 	public ResponseDTO checkBankCodeExist(@RequestBody @Valid CodeModel payload, BindingResult bindings) {
@@ -487,7 +494,7 @@ public class CodeMasterController {
 
 	}
 
-	//we are using this one for rate master
+	// we are using this one for rate master
 	@PostMapping("/saveRateMasterUpdated")
 	public ResponseDTO saveRateMasterUpdated(@RequestBody @Valid RateMasterModel payload, BindingResult bindings) {
 		if (!bindings.hasErrors()) {
@@ -498,57 +505,59 @@ public class CodeMasterController {
 		}
 
 	}
-	
-	//Save Paymatrix Created on 10-11-2020
-		@PostMapping("/saveSeventhMatrix")
-		public ResponseDTO saveSeventhMatrix(@RequestBody @Valid SaveSeventhMatrixModel payload, BindingResult bindings) {
-			if (!bindings.hasErrors()) {
-				log.debug("saveSeventhMatrix");
-				return codeMasterService.saveSeventhMatrix(payload);
-			} else {
-				throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
-			}
-		}
-		//Get All Paymatrix data Created on 10-11-2020
-		@GetMapping("/getAllSeventhMatrixData")
-		public ResponseDTO getAllSeventhMatrixData() {
-			log.debug("getAllSeventhMatrixData");
-			return codeMasterService.getAllSeventhMatrixData();
-		}
-		//Get Paymatrix data by Parameter Created on 10-11-2020
-		@PostMapping("/getSeventhMatrix")
-		public ResponseDTO getSeventhMatrix(@RequestBody @Valid GetSeventhMatrixModel payload, BindingResult bindings) {
-			if (!bindings.hasErrors()) {
-				log.debug("getSeventhMatrix");
-				return codeMasterService.getSeventhMatrix(payload);
-			} else {
-				throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
-			}
 
+	// Save Paymatrix Created on 10-11-2020
+	@PostMapping("/saveSeventhMatrix")
+	public ResponseDTO saveSeventhMatrix(@RequestBody @Valid SaveSeventhMatrixModel payload, BindingResult bindings) {
+		if (!bindings.hasErrors()) {
+			log.debug("saveSeventhMatrix");
+			return codeMasterService.saveSeventhMatrix(payload);
+		} else {
+			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
-		//Edit Paymatrix data by Parameter Created on 10-11-2020
-		@PostMapping("/editSeventhMatrix")
-		public ResponseDTO editSeventhMatrix(@RequestBody @Valid EditSeventhMatrixModel payload, BindingResult bindings) {
-			if (!bindings.hasErrors()) {
-				log.debug("editSeventhMatrix");
-				return codeMasterService.editSeventhMatrix(payload);
-			} else {
-				throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
-			}
+	}
 
+	// Get All Paymatrix data Created on 10-11-2020
+	@GetMapping("/getAllSeventhMatrixData")
+	public ResponseDTO getAllSeventhMatrixData() {
+		log.debug("getAllSeventhMatrixData");
+		return codeMasterService.getAllSeventhMatrixData();
+	}
+
+	// Get Paymatrix data by Parameter Created on 10-11-2020
+	@PostMapping("/getSeventhMatrix")
+	public ResponseDTO getSeventhMatrix(@RequestBody @Valid GetSeventhMatrixModel payload, BindingResult bindings) {
+		if (!bindings.hasErrors()) {
+			log.debug("getSeventhMatrix");
+			return codeMasterService.getSeventhMatrix(payload);
+		} else {
+			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
 		}
-		
-		//Delete Paymatrix data by Parameter Created on 10-11-2020
-			@PostMapping("/deleteSeventhMatrix")
-			public ResponseDTO deleteSeventhMatrix(@RequestBody @Valid EditSeventhMatrixModel payload, BindingResult bindings) {
-				if (!bindings.hasErrors()) {
-					log.debug("deleteSeventhMatrix");
-					return codeMasterService.deleteSeventhMatrix(payload);
-				} else {
-					throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
-				}
 
-			}
-		
+	}
+
+	// Edit Paymatrix data by Parameter Created on 10-11-2020
+	@PostMapping("/editSeventhMatrix")
+	public ResponseDTO editSeventhMatrix(@RequestBody @Valid EditSeventhMatrixModel payload, BindingResult bindings) {
+		if (!bindings.hasErrors()) {
+			log.debug("editSeventhMatrix");
+			return codeMasterService.editSeventhMatrix(payload);
+		} else {
+			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
+		}
+
+	}
+
+	// Delete Paymatrix data by Parameter Created on 10-11-2020
+	@PostMapping("/deleteSeventhMatrix")
+	public ResponseDTO deleteSeventhMatrix(@RequestBody @Valid EditSeventhMatrixModel payload, BindingResult bindings) {
+		if (!bindings.hasErrors()) {
+			log.debug("deleteSeventhMatrix");
+			return codeMasterService.deleteSeventhMatrix(payload);
+		} else {
+			throw new InvalidJsonException(StringConstants.INVALID_INPUT, null);
+		}
+
+	}
 
 }

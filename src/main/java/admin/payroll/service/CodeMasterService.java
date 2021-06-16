@@ -160,7 +160,7 @@ public interface CodeMasterService {
 
 	@Transactional
 	ResponseDTO saveRateMasterUpdated(@Valid RateMasterModel payload);
-	
+
 	@Transactional
 	ResponseDTO saveSeventhMatrix(@Valid SaveSeventhMatrixModel payload);
 
@@ -175,5 +175,8 @@ public interface CodeMasterService {
 
 	@Transactional
 	ResponseDTO deleteSeventhMatrix(@Valid EditSeventhMatrixModel payload);
+
+	@Transactional
+	ResponseDTO getAllBankName();
 
 }

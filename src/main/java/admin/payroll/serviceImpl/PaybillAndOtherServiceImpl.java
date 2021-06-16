@@ -777,8 +777,9 @@ public class PaybillAndOtherServiceImpl implements PaybillAndOtherService {
 	}
 
 	@Override
-	public List<PaybillEntity> getPaymentDataExcel() {
-		return paybillRepo.findAll();
+	public List<DataForValidationModel> getPaymentDataExcel() {
+//		return paybillRepo.findAll();
+		return pmSalHdrRepo.DataForValidation();
 	}
 
 	@Override

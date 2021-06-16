@@ -13,15 +13,15 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import admin.payroll.entity.PaybillEntity;
+import admin.payroll.models.DataForValidationModel;
 
 public class PaymentDataExcelExporter {
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
-	private List<PaybillEntity> listUsers;
+	private List<DataForValidationModel> listUsers;
 
-	public PaymentDataExcelExporter(List<PaybillEntity> listUsers) {
-		this.listUsers = listUsers;
+	public PaymentDataExcelExporter(List<DataForValidationModel> listUsers2) {
+		this.listUsers = listUsers2;
 		workbook = new XSSFWorkbook();
 	}
 
@@ -70,18 +70,18 @@ public class PaymentDataExcelExporter {
 		font.setFontHeight(14);
 		style.setFont(font);
 
-		for (PaybillEntity user : listUsers) {
+		for (DataForValidationModel user : listUsers) {
 			Row row = sheet.createRow(rowCount++);
 			int columnCount = 0;
 
-			createCell(row, columnCount++, user.getGpfNo(), style);
-			createCell(row, columnCount++, user.getEmpNo(), style);
+			createCell(row, columnCount++, user.getBeneciaryCode(), style);
+			createCell(row, columnCount++, "CUK", style);
 			createCell(row, columnCount++, user.getName(), style);
-			createCell(row, columnCount++, user.getBankNo(), style);
-			createCell(row, columnCount++, user.getNetPay(), style);
-			createCell(row, columnCount++, user.getBasic(), style);
-			createCell(row, columnCount++, user.getDesig(), style);
-			createCell(row, columnCount++, user.getAdharNo(), style);
+			createCell(row, columnCount++, null, style);
+			createCell(row, columnCount++, user.getNetpay(), style);
+			createCell(row, columnCount++, null, style);
+			createCell(row, columnCount++, null, style);
+			createCell(row, columnCount++, null, style);
 
 		}
 	}

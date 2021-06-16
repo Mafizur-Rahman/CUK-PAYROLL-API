@@ -19,10 +19,11 @@ public class DataForValidationModel {
 	private Long adharNo;
 	private Integer cpinCode;
 	private Double netpay;
+	private String beneciaryCode;
 
 	public DataForValidationModel(String empNo, String name, String gender, String caddrss1, String caddrss2,
 			String caddrss3, String cdistrict, String state2, String nationality, String bankName, String ifscCode,
-			String banknoNew, Long adharNo, Integer cpinCode, Double netpay) {
+			String banknoNew, Long adharNo, Integer cpinCode, Double netpay, String beneciaryCode) {
 		super();
 		this.empNo = empNo;
 		this.name = name;
@@ -39,6 +40,7 @@ public class DataForValidationModel {
 		this.adharNo = adharNo;
 		this.cpinCode = cpinCode;
 		this.netpay = netpay;
+		this.beneciaryCode = beneciaryCode;
 	}
 
 	public DataForValidationModel() {

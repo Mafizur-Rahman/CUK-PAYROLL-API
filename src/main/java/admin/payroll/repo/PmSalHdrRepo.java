@@ -18,7 +18,7 @@ public interface PmSalHdrRepo extends JpaRepository<PmSalHdrEntity, String> {
 	Optional<PmSalHdrEntity> findByGroupUnitAndPayperiod(@Param("groupUnit") String groupUnit,
 			@Param("paycalPeriod") String payPeriod);
 
-	@Query("select new admin.payroll.models.DataForValidationModel(a.empId,a.name,a.gender,b.caddrss1,b.caddrss2,b.caddrss3,b.cdistrict,b.state2,a.nationality,a.bankName,a.ifscCode,a.banknoNew,a.adharNo,b.cpinCode,c.netPay) FROM EmpMastEntity a,AddressEntity b, PmSalHdrEntity c where a.empId=b.empId and a.empId=c.empNo")
+	@Query("select new admin.payroll.models.DataForValidationModel(a.empId,a.name,a.gender,b.caddrss1,b.caddrss2,b.caddrss3,b.cdistrict,b.state2,a.nationality,a.bankName,a.ifscCode,a.banknoNew,a.adharNo,b.cpinCode,c.netPay,c.beneficiaryCode) FROM EmpMastEntity a,AddressEntity b, PmSalHdrEntity c where a.empId=b.empId and a.empId=c.empNo")
 	List<DataForValidationModel> DataForValidation();
 
 }

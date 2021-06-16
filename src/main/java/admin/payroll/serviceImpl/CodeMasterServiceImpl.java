@@ -861,4 +861,16 @@ public class CodeMasterServiceImpl implements CodeMasterService {
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
 
 	}
+
+	@Override
+	public ResponseDTO getAllBankName() {
+		try {
+			List<PmBankEntity> data = pmBankRepo.findAll();
+			return new ResponseDTO(StringConstants.FetchSuccess, APISTATUS.SUCCESS, HttpStatus.ACCEPTED.value(), data);
+		} catch (Exception e) {
+			log.error("getAll Banke Name {}", e);
+		}
+		return new ResponseDTO(StringConstants.ContactSupportErrorMsg, APISTATUS.FAIL,
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+	}
 }

@@ -186,7 +186,7 @@ public interface PaybillAndOtherService {
 	List<DataForValidationModel> getSalDataForValidationExcel();
 
 	@Transactional
-	List<PaybillEntity> getPaymentDataExcel();
+	List<DataForValidationModel> getPaymentDataExcel();
 
 	@Transactional
 	ResponseDTO readDbt01ExcelFile(MultipartFile excelFile);
